@@ -1,0 +1,25 @@
+#!/bin/sh
+
+store_pid() {
+  pids=("${pids[@]}" "$1")
+}
+
+while read line
+do
+  name=$(echo "$line" | cut -f1 -d:)
+  command=$(echo $(echo "$line" | cut -f2- -d:))
+
+  sh -c "$command" &
+
+  pid="$!"
+  store_pid "$pid"
+  echo "${name}.1[${pid}]: ${command}"
+done < ${1:-'Procfile'}
+
+for p in "${pids[@]}"
+do
+  pid_string="${pid_string}${p} "
+done
+
+trap "kill $pid_string" INT TERM
+wait $pid_string
