@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-eqiv='content-type' content='text/html;charset=utf-8'>
+    <title>shoreman.sh</title>
+    <link rel=stylesheet href="http://jashkenas.github.com/docco/resources/docco.css">
+</head>
+<body>
+<div id=container>
+    <div id=background></div>
+    <table cellspacing=0 cellpadding=0>
+    <thead>
+      <tr>
+        <th class=docs><h1>shoreman.sh</h1></th>
+        <th class=code></th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr><td class='docs'><p><strong>shoreman</strong> is an implementation of the <strong>Procfile</strong> format. Inspired by
+the original <a href="http://ddollar.github.com/foreman/">foreman</a> tool for ruby,
+as well as <a href="https://github.com/josh/norman">norman</a> for node.js.</p>
+
+</td><td class=code><div class=highlight><pre>
+<span class="c">#!/bin/sh</span>
+
+</pre></div></td></tr><tr><td class=docs>
+
+<p>Make sure that any errors cause the script to exit immediately.</p>
+
+</td><td class=code><div class=highlight><pre>
+<span class="nb">set</span> -e
+
+</pre></div></td></tr><tr><td class=docs>
+
+<p>Usage message that is displayed when <code>--help</code> is given as an argument.</p>
+
+</td><td class=code><div class=highlight><pre>
+<span class="c">#/ Usage: shoreman [&lt;procfile&gt;]</span>
+<span class="c">#/ Run Procfiles using shell.</span>
+<span class="c">#/</span>
+<span class="c">#/ The shoreman script reads commands from &lt;procfile&gt; and starts up the</span>
+<span class="c">#/ processes that it describes.</span>
+
+</pre></div></td></tr><tr><td class=docs>
+
+<p>Stolen from shocco</p>
+
+</td><td class=code><div class=highlight><pre>
+expr -- <span class="s2">&quot;$*&quot;</span> : <span class="s2">&quot;.*--help&quot;</span> &gt;/dev/null <span class="o">&amp;&amp;</span> <span class="o">{</span>
+  grep <span class="s1">&#39;^#/&#39;</span> &lt;<span class="s2">&quot;$0&quot;</span> | cut -c4-
+  <span class="nb">exit </span>0
+<span class="o">}</span>
+
+</pre></div></td></tr><tr><td class=docs>
+
+<p>When a process is started, we want to keep track of its pid so we can
+<code>kill</code> it when the parent process receives a signal, and so we can <code>wait</code>
+for it to finish before exiting the parent process.</p>
+
+</td><td class=code><div class=highlight><pre>
+store_pid<span class="o">()</span> <span class="o">{</span>
+  <span class="nv">pids</span><span class="o">=(</span><span class="s2">&quot;${pids[@]}&quot;</span> <span class="s2">&quot;$1&quot;</span><span class="o">)</span>
+<span class="o">}</span>
+
+</pre></div></td></tr><tr><td class=docs>
+
+<p>The Procfile needs to be parsed to extract the process names and commands.
+The file is given on stdin, see the <code>&lt;</code> at the end of this while loop.</p>
+
+</td><td class=code><div class=highlight><pre>
+<span class="k">while </span><span class="nb">read </span>line
+<span class="k">do</span>
+<span class="k">  </span><span class="nv">name</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">&quot;$line&quot;</span> | cut -f1 -d:<span class="k">)</span>
+  <span class="nb">command</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="k">$(</span><span class="nb">echo</span> <span class="s2">&quot;$line&quot;</span> | cut -f2- -d:<span class="k">))</span>
+
+  sh -c <span class="s2">&quot;$command&quot;</span> &amp;
+
+  <span class="nv">pid</span><span class="o">=</span><span class="s2">&quot;$!&quot;</span>
+  store_pid <span class="s2">&quot;$pid&quot;</span>
+  <span class="nb">echo</span> <span class="s2">&quot;${name}.1[${pid}]: ${command}&quot;</span>
+<span class="k">done</span> &lt; <span class="k">${</span><span class="nv">1</span><span class="k">:-</span><span class="s1">&#39;Procfile&#39;</span><span class="k">}</span>
+
+</pre></div></td></tr><tr><td class=docs>
+
+<p>Gather the pids into a space delimited string for handing to <code>kill</code> and
+<code>wait</code>.</p>
+
+</td><td class=code><div class=highlight><pre>
+<span class="k">for </span>p in <span class="s2">&quot;${pids[@]}&quot;</span>
+<span class="k">do</span>
+<span class="k">  </span><span class="nv">pid_string</span><span class="o">=</span><span class="s2">&quot;${pid_string}${p} &quot;</span>
+<span class="k">done</span>
+
+</pre></div></td></tr><tr><td class=docs>
+
+<p>When a <code>SIGINT</code> or <code>SIGTERM</code> is received, this action is run, killing the
+child processes. The sleep stops STDOUT from pouring over the prompt, it
+should probably go at some point.</p>
+
+</td><td class=code><div class=highlight><pre>
+<span class="nv">trap_action</span><span class="o">=</span><span class="s2">&quot;echo &amp;&amp; \</span>
+<span class="s2">  echo sending SIGTERM to all processes &amp;&amp; \</span>
+<span class="s2">  kill $pid_string &amp;&amp; \</span>
+<span class="s2">  sleep 1&quot;</span>
+
+<span class="nb">trap</span> <span class="s2">&quot;$trap_action&quot;</span> INT TERM
+
+</pre></div></td></tr><tr><td class=docs>
+
+<p>Wait for the children to finish executing before exiting.</p>
+
+</td><td class=code><div class=highlight><pre>
+<span class="nb">wait</span> <span class="nv">$pid_string</span>
+
+
+</td><td class=code><div class=highlight><pre>
+</pre></div></td></tr><tr><td class=docs>
+
+</pre></div></td></tr><tr><td class=docs>
+</td><td class=code><div class=highlight><pre>
+
+</pre></div></td></tr><tr><td class=docs></td><td class='code'></td></tr>
+    </tbody>
+    </table>
+</div>
+</body>
+</html>
