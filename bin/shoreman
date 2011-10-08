@@ -2,6 +2,18 @@
 
 set -e
 
+#/ Usage: shoreman [<procfile>]
+#/ Run Procfiles using shell.
+#/
+#/ The shoreman script reads commands from <procfile> and starts up the
+#/ processes that it descripbes.
+
+# Stolen from shocco
+expr -- "$*" : ".*--help" >/dev/null && {
+  grep '^#/' <"$0" | cut -c4-
+  exit 0
+}
+
 store_pid() {
   pids=("${pids[@]}" "$1")
 }
