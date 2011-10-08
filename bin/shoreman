@@ -23,5 +23,10 @@ do
   pid_string="${pid_string}${p} "
 done
 
-trap "kill $pid_string" INT TERM
+trap_action="echo && \
+  echo sending SIGTERM to all processes && \
+  kill $pid_string && \
+  sleep 1"
+
+trap "$trap_action" INT TERM
 wait $pid_string
