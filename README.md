@@ -5,8 +5,6 @@ A shell implementation of the Procfile format.
 
 ## Install
 
-Currently this is *very* pre-alpha code.
-
 Install as a standalone.
 
 ```
