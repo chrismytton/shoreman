@@ -12,13 +12,6 @@ curl https://raw.github.com/hecticjeff/shoreman/master/shoreman.sh -sLo ~/bin/sh
 chmod 755 ~/bin/shoreman
 ```
 
-To have an always up-to-date, bleeding edge, possibly broken
-version available, you can use the folowing snippet in your `.bashrc`.
-
-```shell
-alias shoreman='sh -c "$(curl -fsSL https://raw.github.com/hecticjeff/shoreman/master/shoreman.sh)"'
-```
-
 ## Usage
 
 Head into a project that has a `Procfile` in it, then simply run the
