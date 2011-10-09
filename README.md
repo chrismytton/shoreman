@@ -5,7 +5,8 @@ A shell implementation of the Procfile format.
 
 ## Install
 
-Install as a standalone.
+Install as a standalone, change `~/bin/` to any other directory that's
+in your `$PATH` if you wish.
 
 ```
 curl https://raw.github.com/hecticjeff/shoreman/master/shoreman.sh -sLo ~/bin/shoreman && \
