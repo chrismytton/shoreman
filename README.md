@@ -21,6 +21,10 @@ alias shoreman='sh -c "$(curl -fsSL https://raw.github.com/hecticjeff/shoreman/m
 
 ## Usage
 
+Head into a project that has a `Procfile` in it, then simply run the
+`shoreman` command, it will read your Procfile, and start up the
+processes it finds.
+
 ```
 cd project-with-procfile
 shoreman
