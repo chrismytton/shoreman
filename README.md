@@ -30,6 +30,13 @@ cd project-with-procfile
 shoreman
 ```
 
+## Todo
+
+* Automatically assign a free port to processes.
+* Add proper logging so it's clear what's coming from where.
+* Add concurrency controls for process types.
+* Support `.env` files.
+
 ## Credits
 
 Inspired by the original [Foreman](https://github.com/ddollar/foreman)
