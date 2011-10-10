@@ -61,7 +61,7 @@ done < ${1:-'Procfile'}
 # child processes. The sleep stops STDOUT from pouring over the prompt, it
 # should probably go at some point.
 trap_action="echo SIGINT received && \
-  echo sending SIGTERM to all processes | log system && \
+  echo sending SIGTERM to all processes && \
   kill ${pids[@]} && \
   sleep 1"
 
