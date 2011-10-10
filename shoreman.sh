@@ -39,6 +39,14 @@ log() {
   done
 }
 
+# This starts a command asynchronously and stores its pid in a list for use
+# later on in the script.
+start_command() {
+  sh -c "$1" &
+  pid="$!"
+  store_pid "$pid"
+}
+
 # ## Reading the Procfile
 
 # The Procfile needs to be parsed to extract the process names and commands.
@@ -47,11 +55,7 @@ while read line
 do
   name=$(echo "$line" | cut -f1 -d:)
   command=$(echo $(echo "$line" | cut -f2- -d:))
-
-  sh -c "$command" &
-
-  pid="$!"
-  store_pid "$pid"
+  start_command "$command"
   echo "${name}.1[${pid}]: ${command}"
 done < ${1:-'Procfile'}
 
