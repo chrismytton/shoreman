@@ -50,22 +50,17 @@ do
   echo "${name}.1[${pid}]: ${command}"
 done < ${1:-'Procfile'}
 
-# Gather the pids into a space delimited string for handing to `kill` and
-# `wait`.
-for p in "${pids[@]}"
-do
-  pid_string="${pid_string}${p} "
-done
+# ## Cleanup
 
 # When a `SIGINT` or `SIGTERM` is received, this action is run, killing the
 # child processes. The sleep stops STDOUT from pouring over the prompt, it
 # should probably go at some point.
-trap_action="echo && \
-  echo sending SIGTERM to all processes && \
-  kill $pid_string && \
+trap_action="echo SIGINT received && \
+  echo sending SIGTERM to all processes | log system && \
+  kill ${pids[@]} && \
   sleep 1"
 
 trap "$trap_action" INT TERM
 
 # Wait for the children to finish executing before exiting.
-wait $pid_string
+wait ${pids[@]}
