@@ -26,6 +26,16 @@ store_pid() {
   pids=("${pids[@]}" "$1")
 }
 
+# For logging we want to prefix each entry with the current time, as well
+# as the process name. This takes one argument, the name of the process, and
+# then reads data from stdin, formats it, and sends it to stdout.
+log() {
+  while read data
+  do
+    echo "$(date +"%H:%M:%S") $1\t| $data"
+  done
+}
+
 # The Procfile needs to be parsed to extract the process names and commands.
 # The file is given on stdin, see the `<` at the end of this while loop.
 while read line
