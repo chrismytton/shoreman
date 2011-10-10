@@ -64,12 +64,10 @@ done < ${1:-'Procfile'}
 # When a `SIGINT` or `SIGTERM` is received, this action is run, killing the
 # child processes. The sleep stops STDOUT from pouring over the prompt, it
 # should probably go at some point.
-trap_action="echo SIGINT received && \
+trap "echo SIGINT received && \
   echo sending SIGTERM to all processes && \
-  kill ${pids[@]} && \
-  sleep 1"
-
-trap "$trap_action" INT TERM
+  kill ${pids[*]} && \
+  sleep 1" INT TERM
 
 # Wait for the children to finish executing before exiting.
 wait ${pids[@]}
