@@ -6,14 +6,14 @@
 # Make sure that any errors cause the script to exit immediately.
 set -e
 
+# ## Usage
+
 # Usage message that is displayed when `--help` is given as an argument.
 #/ Usage: shoreman [<procfile>]
 #/ Run Procfiles using shell.
 #/
 #/ The shoreman script reads commands from <procfile> and starts up the
 #/ processes that it describes.
-
-# ## Utilities
 
 # Stolen from shocco. This formats the usage message above by grepping this
 # file for lines starting with `#/`.
@@ -22,12 +22,7 @@ expr -- "$*" : ".*--help" >/dev/null && {
   exit 0
 }
 
-# When a process is started, we want to keep track of its pid so we can
-# `kill` it when the parent process receives a signal, and so we can `wait`
-# for it to finish before exiting the parent process.
-store_pid() {
-  pids=("${pids[@]}" "$1")
-}
+# ## Logging
 
 # For logging we want to prefix each entry with the current time, as well
 # as the process name. This takes one argument, the name of the process, and
@@ -37,6 +32,15 @@ log() {
   do
     echo "$(date +"%H:%M:%S") $1\t| $data"
   done
+}
+
+# ## Running commands
+
+# When a process is started, we want to keep track of its pid so we can
+# `kill` it when the parent process receives a signal, and so we can `wait`
+# for it to finish before exiting the parent process.
+store_pid() {
+  pids=("${pids[@]}" "$1")
 }
 
 # This starts a command asynchronously and stores its pid in a list for use
