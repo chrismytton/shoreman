@@ -56,7 +56,7 @@ do
   name=$(echo "$line" | cut -f1 -d:)
   command=$(echo $(echo "$line" | cut -f2- -d:))
   start_command "$command"
-  echo "${name}.1[${pid}]: ${command}"
+  echo "'${command}' started with pid ${pid}" | log "${name}.1"
 done < ${1:-'Procfile'}
 
 # ## Cleanup
