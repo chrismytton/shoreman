@@ -13,7 +13,10 @@ set -e
 #/ The shoreman script reads commands from <procfile> and starts up the
 #/ processes that it describes.
 
-# Stolen from shocco
+# ## Utilities
+
+# Stolen from shocco. This formats the usage message above by grepping this
+# file for lines starting with `#/`.
 expr -- "$*" : ".*--help" >/dev/null && {
   grep '^#/' <"$0" | cut -c4-
   exit 0
@@ -35,6 +38,8 @@ log() {
     echo "$(date +"%H:%M:%S") $1\t| $data"
   done
 }
+
+# ## Reading the Procfile
 
 # The Procfile needs to be parsed to extract the process names and commands.
 # The file is given on stdin, see the `<` at the end of this while loop.
