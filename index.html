@@ -32,6 +32,12 @@ as well as <a href="https://github.com/josh/norman">norman</a> for node.js.</p>
 
 </pre></div></td></tr><tr><td class=docs>
 
+<h2>Usage</h2>
+
+</td><td class=code><div class=highlight><pre>
+
+</pre></div></td></tr><tr><td class=docs>
+
 <p>Usage message that is displayed when <code>--help</code> is given as an argument.</p>
 
 </td><td class=code><div class=highlight><pre>
@@ -40,12 +46,6 @@ as well as <a href="https://github.com/josh/norman">norman</a> for node.js.</p>
 <span class="c">#/</span>
 <span class="c">#/ The shoreman script reads commands from &lt;procfile&gt; and starts up the</span>
 <span class="c">#/ processes that it describes.</span>
-
-</pre></div></td></tr><tr><td class=docs>
-
-<h2>Utilities</h2>
-
-</td><td class=code><div class=highlight><pre>
 
 </pre></div></td></tr><tr><td class=docs>
 
@@ -60,14 +60,9 @@ expr -- <span class="s2">&quot;$*&quot;</span> : <span class="s2">&quot;.*--help
 
 </pre></div></td></tr><tr><td class=docs>
 
-<p>When a process is started, we want to keep track of its pid so we can
-<code>kill</code> it when the parent process receives a signal, and so we can <code>wait</code>
-for it to finish before exiting the parent process.</p>
+<h2>Logging</h2>
 
 </td><td class=code><div class=highlight><pre>
-store_pid<span class="o">()</span> <span class="o">{</span>
-  <span class="nv">pids</span><span class="o">=(</span><span class="s2">&quot;${pids[@]}&quot;</span> <span class="s2">&quot;$1&quot;</span><span class="o">)</span>
-<span class="o">}</span>
 
 </pre></div></td></tr><tr><td class=docs>
 
@@ -81,6 +76,23 @@ log<span class="o">()</span> <span class="o">{</span>
   <span class="k">do</span>
 <span class="k">    </span><span class="nb">echo</span> <span class="s2">&quot;$(date +&quot;</span>%H:%M:%S<span class="s2">&quot;) $1\t| $data&quot;</span>
   <span class="k">done</span>
+<span class="o">}</span>
+
+</pre></div></td></tr><tr><td class=docs>
+
+<h2>Running commands</h2>
+
+</td><td class=code><div class=highlight><pre>
+
+</pre></div></td></tr><tr><td class=docs>
+
+<p>When a process is started, we want to keep track of its pid so we can
+<code>kill</code> it when the parent process receives a signal, and so we can <code>wait</code>
+for it to finish before exiting the parent process.</p>
+
+</td><td class=code><div class=highlight><pre>
+store_pid<span class="o">()</span> <span class="o">{</span>
+  <span class="nv">pids</span><span class="o">=(</span><span class="s2">&quot;${pids[@]}&quot;</span> <span class="s2">&quot;$1&quot;</span><span class="o">)</span>
 <span class="o">}</span>
 
 </pre></div></td></tr><tr><td class=docs>
