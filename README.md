@@ -13,6 +13,14 @@ curl https://raw.github.com/hecticjeff/shoreman/master/shoreman.sh -sLo ~/bin/sh
 chmod 755 ~/bin/shoreman
 ```
 
+### Homebrew
+
+To install `shoreman(1)` with homebrew run the following:
+
+```
+brew install --HEAD https://gist.github.com/raw/1973792/e7e053623e9c9aaa52ef67afecc4391a65605629/shoreman.rb
+```
+
 ## Usage
 
 Head into a project that has a `Procfile` in it, then simply run the
