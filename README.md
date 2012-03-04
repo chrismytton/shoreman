@@ -5,6 +5,8 @@ A shell implementation of the Procfile format.
 
 ## Install
 
+### Standalone
+
 Install as a standalone, change `~/bin/` to any other directory that's
 in your `$PATH` if you wish.
 
@@ -15,7 +17,8 @@ chmod 755 ~/bin/shoreman
 
 ### Homebrew
 
-To install `shoreman(1)` with homebrew run the following:
+To install shoreman with homebrew use
+[this gist](https://gist.github.com/1973792) with the following command:
 
 ```
 brew install --HEAD https://gist.github.com/raw/1973792/e7e053623e9c9aaa52ef67afecc4391a65605629/shoreman.rb
