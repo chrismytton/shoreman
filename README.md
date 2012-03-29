@@ -35,6 +35,19 @@ cd project-with-procfile
 shoreman
 ```
 
+## Running tests
+
+Before running the tests for shoreman you'll need to install
+[roundup](http://bmizerany.github.com/roundup/), if you're on a mac then
+you should be able to run `brew update && brew install roundup`.
+
+To run the tests, go to the root of the repository then run `make`.
+
+```
+cd shoreman
+make
+```
+
 ## Todo
 
 * Automatically assign a free port to processes.
