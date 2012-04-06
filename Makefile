@@ -1,5 +1,5 @@
 
 test:
-	./scripts/cibuild
+	./script/cibuild
 
 .PHONY: test
