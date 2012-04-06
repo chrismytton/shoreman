@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # **shoreman** is an implementation of the **Procfile** format. Inspired by
 # the original [foreman](http://ddollar.github.com/foreman/) tool for ruby,
 # as well as [norman](https://github.com/josh/norman) for node.js.
