@@ -1,5 +1,5 @@
 
 test:
-	roundup test/shoreman_test.sh
+	./scripts/cibuild
 
 .PHONY: test

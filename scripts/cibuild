@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sh <(curl -fsSL http://git.io/roundup.sh) test/shoreman_test.sh
