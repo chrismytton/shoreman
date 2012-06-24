@@ -14,3 +14,8 @@ it_passes_environment_variables_to_processes() {
   output=$(FOO=bar bash ./shoreman.sh 'test/fixtures/environment_procfile' | head -n1)
   test "$output" = "FOO = bar"
 }
+
+it_automatically_assigns_a_port() {
+  output=$(bash ./shoreman.sh 'test/fixtures/port_procfile' | head -n1)
+  test "$output" = "PORT = 5000"
+}
