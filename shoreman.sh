@@ -46,9 +46,14 @@ store_pid() {
 # This starts a command asynchronously and stores its pid in a list for use
 # later on in the script.
 start_command() {
-  sh -c "$1" &
+  sh -c "PORT=$(get_port) $1" &
   pid="$!"
   store_pid "$pid"
+}
+
+get_port() {
+  PORT=${PORT:-5000}
+  echo $((PORT + 100))
 }
 
 # ## Reading the Procfile
