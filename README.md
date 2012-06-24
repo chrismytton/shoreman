@@ -37,15 +37,25 @@ shoreman
 
 ## Running tests
 
-Before running the tests for shoreman you'll need to install
-[roundup](http://bmizerany.github.com/roundup/), if you're on a mac then
-you should be able to run `brew update && brew install roundup`.
+Tests are written using [roundup](http://bmizerany.github.com/roundup/)
+which is downloaded using `curl` on every test run.
 
 To run the tests, go to the root of the repository then run `make`.
 
 ```
 cd shoreman
 make
+```
+
+### Manually running tests
+
+If you're on a mac then you should be able to run `brew update && brew install roundup`
+to install roundup locally. Then you can run the tests from the root of
+the repository.
+
+```
+cd shoreman
+roundup test/shoreman_test.sh
 ```
 
 ## Todo
