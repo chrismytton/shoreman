@@ -51,6 +51,20 @@ start_command() {
   store_pid "$pid"
 }
 
+# ## Reading the .env file if there is one
+
+# The .env file needs to be a list of assignments like in a shell script.
+# Only lines containing an equal sign are read, which means you can add comments.
+# Preferably shell-style comments so that your editor print them like shell scripts.
+
+if [ -f '.env' ]; then
+  while read line; do
+    if [[ "$line" == *=* ]]; then
+      eval "export $line"
+    fi
+  done < '.env'
+fi
+
 # ## Reading the Procfile
 
 # The Procfile needs to be parsed to extract the process names and commands.
