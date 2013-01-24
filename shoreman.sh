@@ -57,12 +57,13 @@ start_command() {
 # Only lines containing an equal sign are read, which means you can add comments.
 # Preferably shell-style comments so that your editor print them like shell scripts.
 
-if [ -f '.env' ]; then
+ENV_FILE=${2:-'.env'}
+if [ -f $ENV_FILE ]; then
   while read line; do
     if [[ "$line" == *=* ]]; then
       eval "export $line"
     fi
-  done < '.env'
+  done < "$ENV_FILE"
 fi
 
 # ## Reading the Procfile
