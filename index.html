@@ -21,7 +21,7 @@ the original <a href="http://ddollar.github.com/foreman/">foreman</a> tool for r
 as well as <a href="https://github.com/josh/norman">norman</a> for node.js.</p>
 
 </td><td class=code><div class=highlight><pre>
-<span class="c">#!/bin/sh</span>
+<span class="c">#!/bin/bash</span>
 
 </pre></div></td></tr><tr><td class=docs>
 
@@ -106,6 +106,28 @@ start_command<span class="o">()</span> <span class="o">{</span>
   <span class="nv">pid</span><span class="o">=</span><span class="s2">&quot;$!&quot;</span>
   store_pid <span class="s2">&quot;$pid&quot;</span>
 <span class="o">}</span>
+
+</pre></div></td></tr><tr><td class=docs>
+
+<h2>Reading the .env file if there is one</h2>
+
+</td><td class=code><div class=highlight><pre>
+
+</pre></div></td></tr><tr><td class=docs>
+
+<p>The .env file needs to be a list of assignments like in a shell script.
+Only lines containing an equal sign are read, which means you can add comments.
+Preferably shell-style comments so that your editor print them like shell scripts.</p>
+
+</td><td class=code><div class=highlight><pre>
+
+<span class="k">if</span> <span class="o">[</span> -f <span class="s1">&#39;.env&#39;</span> <span class="o">]</span>; <span class="k">then</span>
+<span class="k">  while </span><span class="nb">read </span>line; <span class="k">do</span>
+<span class="k">    if</span> <span class="o">[[</span> <span class="s2">&quot;$line&quot;</span> <span class="o">==</span> *<span class="o">=</span>* <span class="o">]]</span>; <span class="k">then</span>
+<span class="k">      </span><span class="nb">eval</span> <span class="s2">&quot;export $line&quot;</span>
+    <span class="k">fi</span>
+<span class="k">  done</span> &lt; <span class="s1">&#39;.env&#39;</span>
+<span class="k">fi</span>
 
 </pre></div></td></tr><tr><td class=docs>
 
