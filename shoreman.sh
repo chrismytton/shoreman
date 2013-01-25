@@ -59,7 +59,7 @@ start_command() {
 
 ENV_FILE=${2:-'.env'}
 if [ -f $ENV_FILE ]; then
-  while read line; do
+  while read line || [ -n "$line" ]; do
     if [[ "$line" == *=* ]]; then
       eval "export $line"
     fi
@@ -70,13 +70,13 @@ fi
 
 # The Procfile needs to be parsed to extract the process names and commands.
 # The file is given on stdin, see the `<` at the end of this while loop.
-while read line
-do
+PROCFILE=${1:-'Procfile'}
+while read line || [ -n "$line" ]; do
   name=${line%%:*}
   command=${line#*: }
   start_command "$command"
   echo "'${command}' started with pid ${pid}" | log "${name}.1"
-done < ${1:-'Procfile'}
+done < "$PROCFILE"
 
 # ## Cleanup
 
