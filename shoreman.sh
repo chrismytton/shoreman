@@ -72,8 +72,8 @@ fi
 # The file is given on stdin, see the `<` at the end of this while loop.
 while read line
 do
-  name=$(echo "$line" | cut -f1 -d:)
-  command=$(echo $(echo "$line" | cut -f2- -d:))
+  name=${line%%:*}
+  command=${line#*: }
   start_command "$command"
   echo "'${command}' started with pid ${pid}" | log "${name}.1"
 done < ${1:-'Procfile'}
