@@ -56,25 +56,27 @@ start_command() {
 # The .env file needs to be a list of assignments like in a shell script.
 # Only lines containing an equal sign are read, which means you can add comments.
 # Preferably shell-style comments so that your editor print them like shell scripts.
-if [ -f '.env' ]; then
-  while read line; do
+
+ENV_FILE=${2:-'.env'}
+if [ -f $ENV_FILE ]; then
+  while read line || [ -n "$line" ]; do
     if [[ "$line" == *=* ]]; then
       eval "export $line"
     fi
-  done < '.env'
+  done < "$ENV_FILE"
 fi
 
 # ## Reading the Procfile
 
 # The Procfile needs to be parsed to extract the process names and commands.
 # The file is given on stdin, see the `<` at the end of this while loop.
-while read line
-do
-  name=$(echo "$line" | cut -f1 -d:)
-  command=$(echo $(echo "$line" | cut -f2- -d:))
+PROCFILE=${1:-'Procfile'}
+while read line || [ -n "$line" ]; do
+  name=${line%%:*}
+  command=${line#*: }
   start_command "$command"
   echo "'${command}' started with pid ${pid}" | log "${name}.1"
-done < ${1:-'Procfile'}
+done < "$PROCFILE"
 
 # ## Cleanup
 
