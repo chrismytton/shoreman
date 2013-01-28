@@ -10,7 +10,7 @@ Install as a standalone, change `~/bin/` to any other directory that's
 in your `$PATH` if you wish.
 
 ```
-curl https://raw.github.com/hecticjeff/shoreman/master/shoreman.sh -sLo ~/bin/shoreman && \
+curl https://github.com/hecticjeff/shoreman/raw/master/shoreman.sh -sLo ~/bin/shoreman && \
 chmod 755 ~/bin/shoreman
 ```
 
