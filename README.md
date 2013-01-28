@@ -1,5 +1,4 @@
-shoreman
-========
+# shoreman(1)
 
 A shell implementation of the Procfile format.
 
