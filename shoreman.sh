@@ -80,13 +80,16 @@ done < "$PROCFILE"
 
 # ## Cleanup
 
-# When a `SIGINT` or `SIGTERM` is received, this action is run, killing the
+# When a `SIGINT`, `SIGTERM` or `EXIT` is received, this action is run, killing the
 # child processes. The sleep stops STDOUT from pouring over the prompt, it
 # should probably go at some point.
-trap "echo SIGINT received && \
-  echo sending SIGTERM to all processes && \
-  kill ${pids[*]} && \
-  sleep 1" INT TERM
+onexit() {
+  echo SIGINT received
+  echo sending SIGTERM to all processes
+  kill ${pids[*]} &>/dev/null
+  sleep 1
+}
+trap onexit SIGINT SIGTERM EXIT
 
 # Wait for the children to finish executing before exiting.
-wait ${pids[@]}
+wait
