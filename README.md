@@ -2,6 +2,8 @@
 
 A shell implementation of the Procfile format.
 
+[![Build Status](https://travis-ci.org/hecticjeff/shoreman.png?branch=master)](https://travis-ci.org/hecticjeff/shoreman)
+
 ## Install
 
 ### Standalone
@@ -57,10 +59,6 @@ the repository.
 cd shoreman
 roundup test/shoreman_test.sh
 ```
-
-## Build status
-
-[![Build Status](https://travis-ci.org/hecticjeff/shoreman.png?branch=master)](https://travis-ci.org/hecticjeff/shoreman)
 
 ## Todo
 
