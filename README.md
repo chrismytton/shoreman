@@ -58,6 +58,10 @@ cd shoreman
 roundup test/shoreman_test.sh
 ```
 
+## Build status
+
+[![Build Status](https://travis-ci.org/hecticjeff/shoreman.png?branch=master)](https://travis-ci.org/hecticjeff/shoreman)
+
 ## Todo
 
 * Automatically assign a free port to processes.
