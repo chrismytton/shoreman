@@ -66,6 +66,11 @@ roundup test/shoreman_test.sh
 * Add proper logging so it's clear what's coming from where.
 * Add concurrency controls for process types.
 
+## Contributors
+
+* Chris Mytton ([@hecticjeff](https://github.com/hecticjeff))
+* Mickael Riga ([@mig-hub](https://github.com/mig-hub))
+
 ## Credits
 
 Inspired by the original [Foreman](https://github.com/ddollar/foreman)
