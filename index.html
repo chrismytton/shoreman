@@ -27,9 +27,10 @@
         
       
         
-        <p><strong>shoreman</strong> is an implementation of the <strong>Procfile</strong> format. Inspired by
-the original <a href="http://ddollar.github.com/foreman/">foreman</a> tool for ruby,
-as well as <a href="https://github.com/josh/norman">norman</a> for node.js.</p>
+        <p><a href="https://github.com/hecticjeff/shoreman">shoreman</a> is an
+implementation of the <strong>Procfile</strong> format. Inspired by the original
+<a href="http://ddollar.github.com/foreman/">foreman</a> tool for ruby, as
+well as <a href="https://github.com/josh/norman">norman</a> for node.js.</p>
 
         
       
@@ -46,22 +47,24 @@ as well as <a href="https://github.com/josh/norman">norman</a> for node.js.</p>
         
       
         
-        <p>Usage message that is displayed when <code>--help</code> is given as an argument.
-/ Usage: shoreman [<procfile>]
-/ Run Procfiles using shell.
-/
-/ The shoreman script reads commands from <procfile> and starts up the
-/ processes that it describes.</p>
+        <p>Usage message that is displayed when <code>--help</code> is given as an argument.</p>
 
+        
+          <div class='highlight'><pre>usage() {
+  <span class="keyword">echo</span> <span class="string">"Usage: shoreman [&lt;procfile&gt;]"</span>
+  <span class="keyword">echo</span> <span class="string">"Run Procfiles using shell."</span>
+  <span class="keyword">echo</span>
+  <span class="keyword">echo</span> <span class="string">"The shoreman script reads commands from &lt;procfile&gt; and starts up the"</span>
+  <span class="keyword">echo</span> <span class="string">"processes that it describes."</span>
+}</pre></div>
         
       
         
-        <p>Stolen from shocco. This formats the usage message above by grepping this
-file for lines starting with <code>#/</code>.</p>
+        <p>If the —help option is given, show the usage message and exit.</p>
 
         
           <div class='highlight'><pre>expr -- <span class="string">"$*"</span> : <span class="string">".*--help"</span> &gt;/dev/null &amp;&amp; {
-  grep <span class="string">'^#/'</span> &lt;<span class="string">"<span class="variable">$0</span>"</span> | cut -c4-
+  usage
   <span class="keyword">exit</span> 0
 }</pre></div>
         
@@ -114,7 +117,7 @@ later on in the script.</p>
         
       
         
-        <h2>Reading the .env file if there is one</h2>
+        <h2>Reading the .env file</h2>
 
         
       
