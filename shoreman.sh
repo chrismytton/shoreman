@@ -1,7 +1,9 @@
 #!/bin/bash
-# **shoreman** is an implementation of the **Procfile** format. Inspired by
-# the original [foreman](http://ddollar.github.com/foreman/) tool for ruby,
-# as well as [norman](https://github.com/josh/norman) for node.js.
+
+# [shoreman](https://github.com/hecticjeff/shoreman) is an
+# implementation of the **Procfile** format. Inspired by the original
+# [foreman](http://ddollar.github.com/foreman/) tool for ruby, as
+# well as [norman](https://github.com/josh/norman) for node.js.
 
 # Make sure that any errors cause the script to exit immediately.
 set -e
