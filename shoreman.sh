@@ -53,7 +53,7 @@ start_command() {
   store_pid "$pid"
 }
 
-# ## Reading the .env file if there is one
+# ## Reading the .env file
 
 # The .env file needs to be a list of assignments like in a shell script.
 # Only lines containing an equal sign are read, which means you can add comments.
