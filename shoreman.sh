@@ -11,16 +11,17 @@ set -e
 # ## Usage
 
 # Usage message that is displayed when `--help` is given as an argument.
-#/ Usage: shoreman [<procfile>]
-#/ Run Procfiles using shell.
-#/
-#/ The shoreman script reads commands from <procfile> and starts up the
-#/ processes that it describes.
+usage() {
+  echo "Usage: shoreman [<procfile>]"
+  echo "Run Procfiles using shell."
+  echo
+  echo "The shoreman script reads commands from <procfile> and starts up the"
+  echo "processes that it describes."
+}
 
-# Stolen from shocco. This formats the usage message above by grepping this
-# file for lines starting with `#/`.
+# If the --help option is given, show the usage message and exit.
 expr -- "$*" : ".*--help" >/dev/null && {
-  grep '^#/' <"$0" | cut -c4-
+  usage
   exit 0
 }
 
