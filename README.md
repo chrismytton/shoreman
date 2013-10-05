@@ -60,6 +60,12 @@ cd shoreman
 roundup test/shoreman_test.sh
 ```
 
+## Projects using shoreman
+
+- [dokku-shoreman](https://github.com/statianzo/dokku-shoreman) a plugin
+  for [dokku](https://github.com/progrium/dokku) to allow it to run
+  multiple process types.
+
 ## Todo
 
 * Automatically assign a free port to processes.
