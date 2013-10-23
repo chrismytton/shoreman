@@ -33,7 +33,8 @@ expr -- "$*" : ".*--help" >/dev/null && {
 log() {
   while read data
   do
-    echo "$(date +"%H:%M:%S") $1\t| $data"
+    __TAB_CHARACTER=$'\t'
+    echo "$(date +"%H:%M:%S") ${1}${__TAB_CHARACTER}| $data"
   done
 }
 
