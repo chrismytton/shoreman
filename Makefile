@@ -1,5 +1,5 @@
 
 test:
-	./script/cibuild
+	bash test/roundup.sh test/shoreman_test.sh
 
 .PHONY: test
