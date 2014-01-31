@@ -25,3 +25,9 @@ it_can_pass_env_file_as_second_argument() {
   output=$(bash ./shoreman.sh 'test/fixtures/env_file_arg_procfile' 'test/fixtures/env_file_arg' | head -n1)
   test "$output" = "MUZ = bar"
 }
+
+it_ignores_comments_in_env_file() {
+  cd "test/fixtures"
+  output=$(bash ../../shoreman.sh 'simple_procfile' 'env_file_with_comments' | head -n1)
+  test "$output" = "Hello"
+}
