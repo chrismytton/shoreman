@@ -18,12 +18,7 @@ chmod 755 ~/bin/shoreman
 
 ### Homebrew
 
-To install shoreman with homebrew use
-[this gist](https://gist.github.com/1973792) with the following command:
-
-```
-brew install --HEAD https://gist.github.com/raw/1973792/e7e053623e9c9aaa52ef67afecc4391a65605629/shoreman.rb
-```
+    brew install --HEAD hecticjeff/formula/shoreman
 
 ## Usage
 
