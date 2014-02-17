@@ -50,7 +50,7 @@ store_pid() {
 # This starts a command asynchronously and stores its pid in a list for use
 # later on in the script.
 start_command() {
-  sh -c "$1" &
+  bash -c "$1" &
   pid="$!"
   store_pid "$pid"
 }
