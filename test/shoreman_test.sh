@@ -31,3 +31,14 @@ it_ignores_comments_in_env_file() {
   output=$(bash ../../shoreman.sh 'simple_procfile' 'env_file_with_comments'; :)
   echo "$output" | grep -q "Hello"
 }
+
+it_passes_default_port_number() {
+  output=$(bash ./shoreman.sh 'test/fixtures/port_procfile'; :)
+  echo "$output" | grep -q "PORT 5000"
+}
+
+it_allows_overriding_port_number() {
+  output=$(bash ./shoreman.sh 'test/fixtures/port_procfile' 'test/fixtures/port_env_file'; :)
+  echo "$output" | grep -q "PORT 9292"
+}
+
