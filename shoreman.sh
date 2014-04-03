@@ -40,6 +40,12 @@ log() {
 
 # ## Running commands
 
+# Using netstat, find an open port (this can be overridden in `.env`)
+
+find_open_port() {
+	while netstat -atn | grep -q :$PORT; do PORT=$(expr $PORT + 1); done;
+}
+
 # When a process is started, we want to keep track of its pid so we can
 # `kill` it when the parent process receives a signal, and so we can `wait`
 # for it to finish before exiting the parent process.
@@ -60,6 +66,8 @@ start_command() {
 # The .env file needs to be a list of assignments like in a shell script.
 # Only lines containing an equal sign are read, which means you can add comments.
 # Preferably shell-style comments so that your editor print them like shell scripts.
+# This would be the place to specify a port number for your application manually,
+# for example `PORT = 9292`
 
 ENV_FILE=${2:-'.env'}
 if [ -f $ENV_FILE ]; then
@@ -68,6 +76,11 @@ if [ -f $ENV_FILE ]; then
       eval "export $line"
     fi
   done < "$ENV_FILE"
+fi
+
+if [ -z $PORT ]; then
+	export PORT=5000
+	find_open_port
 fi
 
 # ## Reading the Procfile
