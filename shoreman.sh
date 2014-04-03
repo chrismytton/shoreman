@@ -43,7 +43,7 @@ log() {
 # Using netstat, find an open port (this can be overridden in `.env`)
 
 find_open_port() {
-	while netstat -atn | grep -q :$PORT; do PORT=$(expr $PORT + 1); done;
+  while netstat -atn | grep -q :$PORT; do PORT=$(expr $PORT + 1); done;
 }
 
 # When a process is started, we want to keep track of its pid so we can
