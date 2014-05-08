@@ -31,3 +31,18 @@ it_ignores_comments_in_env_file() {
   output=$(bash ../../shoreman.sh 'simple_procfile' 'env_file_with_comments'; :)
   echo "$output" | grep -q "Hello"
 }
+
+it_detects_dead_processes() {
+  output=$(bash ./shoreman.sh 'test/fixtures/simple_procfile'; :)
+  echo "$output" | grep -q "Exited"
+}
+
+it_terminates_if_a_process_dies() {
+  output=$(bash ./shoreman.sh 'test/fixtures/failing_process_procfile'; :)
+  echo "$output" | grep -q "Terminating all processes"
+}
+
+it_informs_if_procfile_doesnt_exist() {
+  output=$(bash ./shoreman.sh 'nonexistent_procfile'; :)
+  echo "$output" | grep -q "doesn't exist"
+}

@@ -1,23 +1,46 @@
 #!/bin/bash
+
+# [shoreman](https://github.com/hecticjeff/shoreman) is an
+# implementation of the **Procfile** format. Inspired by the original
+# [foreman](http://ddollar.github.com/foreman/) tool for ruby, as
+# well as [norman](https://github.com/josh/norman) for node.js.
+
+# Make sure that any errors cause the script to exit immediately.
 set -eo pipefail
 
-# Temporary empty dir to created named pipes (fifos)
-# that will be needed to keep track of the created process PIDs
-# while also formatting their output at the same time.
-temp_dir=`mktemp -d /tmp/shoreman.XXXXXXXXXX`
+# Usage message that is displayed when `--help` is given as an argument.
+usage() {
+  echo "Usage: shoreman [<procfile>]"
+  echo "Run Procfiles using shell."
+  echo
+  echo "The shoreman script reads commands from <procfile> and starts up the"
+  echo "processes that it describes."
+}
+
+# If the --help option is given, show the usage message and exit.
+expr -- "$*" : ".*--help" >/dev/null && {
+  usage
+  exit 0
+}
+
+# Temporary empty dir to store named pipes that will
+# be needed to keep track of the created processes PIDs
+# and still be capable of formatting their output
+temp_dir="${TMPDIR:-/tmp}/shoreman.$$"
+mkdir -p "$temp_dir"
 
 # This function formats all text coming from STDIN to look like:
-# process_name | output
-# ensuring a fixed distance of 12 chars until the separating pipe
-# the result is that it's clear what's coming from where.
+# process_name | printed line
+# fixed distance of 12 chars until the separating pipe is ensured
+# the result is that it's clear what output's coming from where
 # the usage is: command_to_format | log process_name
 log() {
   awk_cmd="{ printf \"%-12s | %s\\n\", \"$1\", \$1}"
   cat - | awk -F'|' "$awk_cmd"
 }
 
-# Associative data storage use to link a process PID with
-# the name it was given in the Procfile
+# Associative data storage use to link a process PID's with
+# the name it was given in the Procfile. Used for better errors
 hput () {
   eval hash"$1"='$2'
 }
@@ -26,7 +49,7 @@ hget () {
   eval echo '${hash'"$1"'#hash}'
 }
 
-# Convenient function to scope shoreman's own output
+# Convenient function to identify shoreman's own output
 info() {
   echo "$1" | log "shoreman"
 }
@@ -46,7 +69,7 @@ start_command() {
 
   # We send the executed command output to 
   #bash -lc "$cmd &> $cmd_fifo" &
-  ($cmd &> $cmd_fifo) &
+  bash -c "$cmd" &> $cmd_fifo &
   pid="$!"
   pids=("${pids[@]}" "$pid")
 
@@ -55,8 +78,6 @@ start_command() {
   hput $pid $name
   info "$name started with pid=$pid"
 }
-
-info "shoreman started with pid=$$"
 
 # ## Reading the .env file
 
@@ -75,14 +96,26 @@ fi
 
 # ## Reading the Procfile
 
-# The Procfile needs to be parsed to extract the process names and commands.
-# The file is given on stdin, see the `<` at the end of this while loop.
 procfile=${1:-'Procfile'}
-while read line || [ -n "$line" ]; do
-  name=${line%%:*}
-  command=${line#*: }
-  start_command "$command" $name
-done < "$procfile"
+
+if [[ -e "$procfile" ]]; then
+  
+  info "shoreman started with pid=$$"
+
+  # The Procfile needs to be parsed to extract the process names and commands.
+  # The file is given on stdin, see the `<` at the end of this while loop.
+  while read line || [ -n "$line" ]; do
+    name=${line%%:*}
+    command=${line#*: }
+    start_command "$command" $name
+  done < "$procfile"
+
+else
+
+  echo "Procfile doesn't exist."
+  exit 1
+
+fi
 
 # ## Process management
 
@@ -102,31 +135,46 @@ send_signal() {
   done
 }
 
+any_children_alive() {
+  for pid in "${pids[@]}"; do
+    if kill -0 $pid &> /dev/null; then
+      return 0
+    fi
+  done
+  return 1
+}
+
 # When a `SIGINT` or `SIGTERM` is received, this action is run, signaling the
 # child processes with SIGTERM to gracefully shutdown within 3 seconds.
 # After that waitime, any remaining children are all killed with SIGKILL.
 # Shoreman does its best to avoid any process from outliving it.
 onexit() {
   # An explanation for the exit is passed as first param
-  info "$1"
+  [[ -n "$1" ]] && info "$1"
   info "Terminating all processes"
 
   # the 0 means don't print messages
   send_signal SIGTERM 0
+  sleep 0.5
 
-  info "Waiting 3s for children termination"
-  sleep 3
+  if any_children_alive; then
+    info "Waiting 3s for children termination"
+    sleep 3
 
-  # we disown all jobs to prevent error messages
-  # when we try to kill them
-  disown -a
+    # we disown all jobs to prevent error messages
+    # when we try to kill them
+    disown -a
 
-  # the 1 causes a message to be printed for each
-  # misbehaving process that didn't exit gracefully
-  send_signal SIGKILL 1
+    # the 1 causes a message to be printed for each
+    # misbehaving process that didn't exit gracefully
+    send_signal SIGKILL 1
+
+    # Can this happen? Maybe in a case of process permissions?
+    any_children_alive && info "WARNING: some children were not killed by SIGKILL"
+  fi
 
   info 'Removing temporary files'
-  rm -rf $temp_dir && info 'OK'
+  rm -rf "$temp_dir" && info 'OK'
 
   exit 0
 }
@@ -138,7 +186,8 @@ trap 'onexit "EXIT signal"' SIGTERM
 while true; do
   for pid in "${pids[@]}"; do
     if ! kill -0 $pid &> /dev/null; then
-      onexit "Error: `hget $pid` is no longer running"
+      echo "Exited" | log "`hget $pid`"
+      onexit
     fi
   done
   sleep 0.5

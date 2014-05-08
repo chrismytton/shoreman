@@ -1,0 +1,2 @@
+worker: while true; do sleep 1; done
+failer: sleep 1 && exit 1
