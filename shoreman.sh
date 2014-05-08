@@ -25,22 +25,20 @@ expr -- "$*" : ".*--help" >/dev/null && {
 
 # Temporary empty dir to store named pipes that will
 # be needed to keep track of the created processes PIDs
-# and still be capable of formatting their output
+# and still be capable of formatting their output.
 temp_dir="${TMPDIR:-/tmp}/shoreman.$$"
 mkdir -p "$temp_dir"
 
-# This function formats all text coming from STDIN to look like:
-# process_name | printed line
-# fixed distance of 12 chars until the separating pipe is ensured
-# the result is that it's clear what output's coming from where
-# the usage is: command_to_format | log process_name
-log() {
+# Format all text coming from STDIN to look like:
+# some_app     | output ...
+log_as() {
+  # ensure there are 12 chars before the separating pipe.
   awk_cmd="{ printf \"%-12s | %s\\n\", \"$1\", \$1}"
   cat - | awk -F'|' "$awk_cmd"
 }
 
-# Associative data storage use to link a process PID's with
-# the name it was given in the Procfile. Used for better errors
+# Associative data storage used to link a process PID's with
+# its Procfile name. Used for better errors.
 hput () {
   eval hash"$1"='$2'
 }
@@ -49,15 +47,15 @@ hget () {
   eval echo '${hash'"$1"'#hash}'
 }
 
-# Convenient function to identify shoreman's own output
-info() {
-  echo "$1" | log "shoreman"
+# Convenience function to identify shoreman's own output.
+log() {
+  echo "$1" | log_as "shoreman"
 }
 
 # When a process with a name and a command is read from the
 # Profile. this function launches the command, stores it's pid
-# informs that PID to the user and then passed the command output
-# through the log function for pretty formatting.
+# prints that PID to the user and then pipes the command output
+# through the log_as function for pretty formatting.
 start_command() {
   name=$2
   cmd=$1
@@ -73,10 +71,10 @@ start_command() {
   pid="$!"
   pids=("${pids[@]}" "$pid")
 
-  log $name < $cmd_fifo &
+  log_as $name < $cmd_fifo &
   # Associate pid with name for better error messages
   hput $pid $name
-  info "$name started with pid=$pid"
+  echo "Started with pid $pid" | log_as $name
 }
 
 # ## Reading the .env file
@@ -100,7 +98,7 @@ procfile=${1:-'Procfile'}
 
 if [[ -e "$procfile" ]]; then
   
-  info "shoreman started with pid=$$"
+  log "Started with pid $$"
 
   # The Procfile needs to be parsed to extract the process names and commands.
   # The file is given on stdin, see the `<` at the end of this while loop.
@@ -121,13 +119,13 @@ fi
 
 # This sends the signal passed as first argument to all alive processes
 # in the $pids array, ignoring errors.  
-# It prints log messages if the second parameter is 1.
+# It prints messages if the second parameter is 1.
 send_signal() {
   for pid in "${pids[@]}"; do
     # Only run if the process exists
     if kill -0 $pid &> /dev/null; then
       if [[ "$2" == "1" ]]; then
-        info "Sending $1 to `hget $pid`"
+        log "Sending $1 to `hget $pid`"
       fi
       # Ignore errors
       kill -s $1 $pid &> /dev/null || :
@@ -146,19 +144,19 @@ any_children_alive() {
 
 # When a `SIGINT` or `SIGTERM` is received, this action is run, signaling the
 # child processes with SIGTERM to gracefully shutdown within 3 seconds.
-# After that waitime, any remaining children are all killed with SIGKILL.
+# After that time, any remaining children killed with SIGKILL.
 # Shoreman does its best to avoid any process from outliving it.
 onexit() {
   # An explanation for the exit is passed as first param
-  [[ -n "$1" ]] && info "$1"
-  info "Terminating all processes"
+  [[ -n "$1" ]] && log "$1"
+  log "Terminating all processes"
 
   # the 0 means don't print messages
   send_signal SIGTERM 0
   sleep 0.5
 
   if any_children_alive; then
-    info "Waiting 3s for children termination"
+    log "Waiting 3s for children termination"
     sleep 3
 
     # we disown all jobs to prevent error messages
@@ -170,11 +168,11 @@ onexit() {
     send_signal SIGKILL 1
 
     # Can this happen? Maybe in a case of process permissions?
-    any_children_alive && info "WARNING: some children were not killed by SIGKILL"
+    any_children_alive && log "WARNING: some children were not killed by SIGKILL"
   fi
 
-  info 'Removing temporary files'
-  rm -rf "$temp_dir" && info 'OK'
+  log 'Removing temporary files'
+  rm -rf "$temp_dir" && log 'OK'
 
   exit 0
 }
@@ -186,7 +184,7 @@ trap 'onexit "EXIT signal"' SIGTERM
 while true; do
   for pid in "${pids[@]}"; do
     if ! kill -0 $pid &> /dev/null; then
-      echo "Exited" | log "`hget $pid`"
+      echo "Exited" | log_as "`hget $pid`"
       onexit
     fi
   done
