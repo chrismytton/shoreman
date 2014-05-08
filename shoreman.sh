@@ -80,8 +80,8 @@ start_command() {
 # ## Reading the .env file
 
 # The .env file needs to be a list of assignments like in a shell script.
-# Only lines containing an equal sign are read, which means you can add comments.
-# Preferably shell-style comments so that your editor print them like shell scripts.
+# Only lines containing an equal sign that don't begin with # are read, this 
+# means you can add shell-style comments.
 
 env_file=${2:-'.env'}
 if [ -f $env_file ]; then

@@ -64,13 +64,13 @@ roundup test/shoreman_test.sh
 ## Todo
 
 * Automatically assign a free port to processes.
-* Add proper logging so it's clear what's coming from where.
 * Add concurrency controls for process types.
 
 ## Contributors
 
 * Chris Mytton ([@hecticjeff](https://github.com/hecticjeff))
 * Mickael Riga ([@mig-hub](https://github.com/mig-hub))
+* David Peláez ([@davidpelaez](https://github.com/davidpelaez))
 
 ## Credits
 
