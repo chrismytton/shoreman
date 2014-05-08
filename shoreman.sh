@@ -112,7 +112,9 @@ onexit() {
   info "Terminating all processes"
 
   # the 0 means don't print messages
-  send_signal SIGTERM 1
+  send_signal SIGTERM 0
+
+  info "Waiting 3s for children termination"
   sleep 3
 
   # we disown all jobs to prevent error messages
@@ -123,14 +125,15 @@ onexit() {
   # misbehaving process that didn't exit gracefully
   send_signal SIGKILL 1
 
+  info 'Removing temporary files'
+  rm -rf $temp_dir && info 'OK'
+
   exit 0
 }
 
 trap 'onexit "SIGINT received."' SIGINT
 trap 'onexit "SIGTERM received."' SIGTERM
-
-# We mind our manners and remove our temporary files upon exit
-trap "rm -rf $temp_dir" EXIT
+trap 'onexit "EXIT signal"' SIGTERM
 
 while true; do
   for pid in "${pids[@]}"; do
