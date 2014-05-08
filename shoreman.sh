@@ -4,7 +4,7 @@ set -eo pipefail
 # Temporary empty dir to created named pipes (fifos)
 # that will be needed to keep track of the created process PIDs
 # while also formatting their output at the same time.
-temp_dir=`mktemp -d .tmp.XXXXXXXXXX`
+temp_dir=`mktemp -d /tmp/shoreman.XXXXXXXXXX`
 
 # This function formats all text coming from STDIN to look like:
 # process_name | output
