@@ -12,7 +12,7 @@ set -e
 
 # Usage message that is displayed when `--help` is given as an argument.
 usage() {
-  echo "Usage: shoreman [procfile|Procfile] [envfile|.env]"
+  echo "Usage: shoreman [<procfile>]"
   echo "Run Procfiles using shell."
   echo
   echo "The shoreman script reads commands from <procfile> and starts up the"
@@ -62,7 +62,7 @@ start_command() {
 
 ENV_FILE=${2:-'.env'}
 if [ -f $ENV_FILE ]; then
-  export $(cat "$ENV_FILE" | egrep -v "^\s*(#|$)" | xargs)
+  export $(cat "$ENV_FILE" | grep "^[^#]*=.*" | xargs)
 fi
 
 # ## Reading the Procfile

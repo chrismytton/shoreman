@@ -28,6 +28,6 @@ it_can_pass_env_file_as_second_argument() {
 
 it_ignores_comments_in_env_file() {
   cd "test/fixtures"
-  output=$(bash ../../shoreman.sh 'simple_procfile' 'env_file_with_comments'; :)
-  echo "$output" | grep -q "Hello"
+  output=$(bash ../../shoreman.sh 'commented_environment_procfile' 'env_file_with_comments'; :)
+  echo "$output" | grep -q "42 does not contain: bar"
 }

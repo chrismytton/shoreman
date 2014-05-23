@@ -1,3 +1,8 @@
 # comment that could look like variable assignment:
   #FOO=bar
+  #
+#
+
+H2G2=42
+
 # one more comment

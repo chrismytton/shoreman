@@ -1,0 +1,1 @@
+example: echo "$FOO$H2G2 does not contain: bar"
