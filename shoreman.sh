@@ -12,10 +12,10 @@ set -e
 
 # Usage message that is displayed when `--help` is given as an argument.
 usage() {
-  echo "Usage: shoreman [<procfile>]"
+  echo "Usage: shoreman [procfile|Procfile] [envfile|.env]"
   echo "Run Procfiles using shell."
   echo
-  echo "The shoreman script reads commands from <procfile> and starts up the"
+  echo "The shoreman script reads commands from [procfile] and starts up the"
   echo "processes that it describes."
 }
 

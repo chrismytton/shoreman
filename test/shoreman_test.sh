@@ -2,7 +2,7 @@ describe "Shoreman"
 
 it_displays_usage() {
   usage=$(bash ./shoreman.sh --help | head -n1)
-  test "$usage" = "Usage: shoreman [<procfile>]"
+  test "$usage" = "Usage: shoreman [procfile|Procfile] [envfile|.env]"
 }
 
 it_runs_simple_processes() {
