@@ -12,7 +12,7 @@ set -e
 
 # Usage message that is displayed when `--help` is given as an argument.
 usage() {
-  echo "Usage: shoreman [<procfile>]"
+  echo "Usage: shoreman [procfile|Procfile] [envfile|.env]"
   echo "Run Procfiles using shell."
   echo
   echo "The shoreman script reads commands from <procfile> and starts up the"
@@ -58,16 +58,11 @@ start_command() {
 # ## Reading the .env file
 
 # The .env file needs to be a list of assignments like in a shell script.
-# Only lines containing an equal sign are read, which means you can add comments.
-# Preferably shell-style comments so that your editor print them like shell scripts.
+# Shell-style comments are permitted.
 
 ENV_FILE=${2:-'.env'}
 if [ -f $ENV_FILE ]; then
-  while read line || [ -n "$line" ]; do
-    if [[ "$line" != \#* && "$line" == *=* ]]; then
-      eval "export $line"
-    fi
-  done < "$ENV_FILE"
+  export $(cat "$ENV_FILE" | egrep -v "^\s*(#|$)" | xargs)
 fi
 
 # ## Reading the Procfile
