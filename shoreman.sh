@@ -29,18 +29,6 @@ expr -- "$*" : ".*--help" >/dev/null && {
 temp_dir="${TMPDIR:-/tmp}/shoreman.$$"
 mkdir -p "$temp_dir"
 
-procfile=${1:-'Procfile'}
-
-# for better formatting, we find the longest process name
-longest_name_length=`cat $procfile | awk -F':' '{print $1}' | wc -L`
-shoreman_length=`echo shoreman | wc -L` #8!!
-# we take the largest of either numbers
-if [[ "$longest_name_length" -gt "$shoreman_length" ]]; then
-  target_length="$longest_name_length"
-else
-  target_length="$shoreman_length"
-fi
-
 # Format all text coming from STDIN to look like:
 # some_app     | output ...
 log_as() {
@@ -106,11 +94,21 @@ fi
 
 # ## Reading the Procfile
 
-
+procfile=${1:-'Procfile'}
 
 if [[ -e "$procfile" ]]; then
   
   log "Started with pid $$"
+
+  # for better formatting, we find the longest process name
+  longest_name_length=`cat $procfile | awk -F':' '{print $1}' | wc -L`
+  shoreman_length=`echo shoreman | wc -L` #8!!
+  # we take the largest of either numbers
+  if [[ "$longest_name_length" -gt "$shoreman_length" ]]; then
+    target_length="$longest_name_length"
+  else
+    target_length="$shoreman_length"
+  fi
 
   # The Procfile needs to be parsed to extract the process names and commands.
   # The file is given on stdin, see the `<` at the end of this while loop.
