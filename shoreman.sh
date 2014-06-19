@@ -50,7 +50,7 @@ store_pid() {
 # This starts a command asynchronously and stores its pid in a list for use
 # later on in the script.
 start_command() {
-  bash -c "$1" &
+  bash -c "$1" 2>&1 | log "$2" &
   pid="$!"
   store_pid "$pid"
 }
@@ -73,8 +73,8 @@ PROCFILE=${1:-'Procfile'}
 while read line || [ -n "$line" ]; do
   name=${line%%:*}
   command=${line#*: }
-  start_command "$command"
-  echo "'${command}' started with pid ${pid}" | log "${name}.1"
+  start_command "$command" "${name}"
+  echo "'${command}' started with pid ${pid}" | log "${name}"
 done < "$PROCFILE"
 
 # ## Cleanup
