@@ -31,10 +31,14 @@ expr -- "$*" : ".*--help" >/dev/null && {
 # as the process name. This takes one argument, the name of the process, and
 # then reads data from stdin, formats it, and sends it to stdout.
 log() {
+  pid="$!"
+  index=$((31 + ($pid % 7)))
+
   while read data
   do
     __TAB_CHARACTER=$'\t'
-    echo "$(date +"%H:%M:%S") ${1}${__TAB_CHARACTER}| $data"
+    prefix="\033[1;${index}m$(date +"%H:%M:%S") ${1}\033[0m"
+    echo -e "$prefix${__TAB_CHARACTER=$'\t'}| $data"
   done
 }
 
