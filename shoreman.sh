@@ -31,10 +31,16 @@ expr -- "$*" : ".*--help" >/dev/null && {
 # as the process name. This takes one argument, the name of the process, and
 # then reads data from stdin, formats it, and sends it to stdout.
 log() {
+  # Bash colors start from 31 up to 38. Instead of a hash set and storing a
+  # bunch of variables, we will simply calculate what color the process will get
+  # base on its PID
+  color=$((31 + ($! % 7)))
+
   while read data
   do
     __TAB_CHARACTER=$'\t'
-    echo "$(date +"%H:%M:%S") ${1}${__TAB_CHARACTER}| $data"
+    prefix="\033[1;${color}m$(date +"%H:%M:%S") ${1}\033[0m"
+    echo -e "$prefix${__TAB_CHARACTER=$'\t'}| $data"
   done
 }
 
