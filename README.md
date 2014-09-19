@@ -63,7 +63,6 @@ roundup test/shoreman_test.sh
 
 ## Todo
 
-* Automatically assign a free port to processes.
 * Add proper logging so it's clear what's coming from where.
 * Add concurrency controls for process types.
 

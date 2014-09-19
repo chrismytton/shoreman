@@ -31,3 +31,13 @@ it_ignores_comments_in_env_file() {
   output=$(../../shoreman.sh 'commented_environment_procfile' 'env_file_with_comments'; :)
   echo "$output" | grep -q "42 does not contain: bar"
 }
+
+it_assigns_a_default_port_number() {
+  output=$(./shoreman.sh 'test/fixtures/port_number_procfile'; :)
+  echo "$output" | grep -q "5000"
+}
+
+it_allows_overriding_the_port_number() {
+  output=$(PORT=5555 ./shoreman.sh 'test/fixtures/port_number_procfile'; :)
+  echo "$output" | grep -q "5555"
+}

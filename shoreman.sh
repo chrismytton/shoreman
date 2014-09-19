@@ -61,6 +61,9 @@ start_command() {
 
 # ## Reading the .env file
 
+# Set a default port before loading the .env file
+PORT=${PORT:-5000}
+
 # The .env file needs to be a list of assignments like in a shell script.
 # Shell-style comments are permitted.
 
