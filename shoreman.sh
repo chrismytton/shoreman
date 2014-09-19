@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # [shoreman](https://github.com/hecticjeff/shoreman) is an
 # implementation of the **Procfile** format. Inspired by the original
@@ -30,19 +30,18 @@ expr -- "$*" : ".*--help" >/dev/null && {
 # For logging we want to prefix each entry with the current time, as well
 # as the process name. This takes one argument, the name of the process, and
 # then reads data from stdin, formats it, and sends it to stdout.
-log() {
+log() { (
   # Bash colors start from 31 up to 38. Instead of a hash set and storing a
   # bunch of variables, we will simply calculate what color the process will get
   # base on its PID
   color=$((31 + ($! % 7)))
 
-  while read data
+  while read -r data
   do
-    __TAB_CHARACTER=$'\t'
-    prefix="\033[1;${color}m$(date +"%H:%M:%S") ${1}\033[0m"
-    echo -e "$prefix${__TAB_CHARACTER=$'\t'}| $data"
+    printf "\033[1;%sm%s %s\033[0m" "$color" "$(date +"%H:%M:%S")" "$1"
+    printf "\t| %s\n" "$data"
   done
-}
+) }
 
 # ## Running commands
 
@@ -50,15 +49,14 @@ log() {
 # `kill` it when the parent process receives a signal, and so we can `wait`
 # for it to finish before exiting the parent process.
 store_pid() {
-  pids=("${pids[@]}" "$1")
+  pids="$pids $1"
 }
 
 # This starts a command asynchronously and stores its pid in a list for use
 # later on in the script.
 start_command() {
-  bash -c "$1" 2>&1 | log "$2" &
-  pid="$!"
-  store_pid "$pid"
+  ( eval "$1" 2>&1 ) | log "$2" &
+  store_pid "$!"
 }
 
 # ## Reading the .env file
@@ -80,7 +78,7 @@ while read line || [ -n "$line" ]; do
   name=${line%%:*}
   command=${line#*: }
   start_command "$command" "${name}"
-  echo "'${command}' started with pid ${pid}" | log "${name}"
+  echo "'${command}' started with pid $!" | log "${name}"
 done < "$PROCFILE"
 
 # ## Cleanup
@@ -91,10 +89,10 @@ done < "$PROCFILE"
 onexit() {
   echo SIGINT received
   echo sending SIGTERM to all processes
-  kill ${pids[*]} &>/dev/null
+  kill $pids > /dev/null 2>&1
   sleep 1
 }
-trap onexit SIGINT SIGTERM EXIT
+trap onexit INT TERM EXIT
 
 # Wait for the children to finish executing before exiting.
 wait
