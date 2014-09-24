@@ -38,7 +38,7 @@ log() { (
 
   while read -r data
   do
-    printf "\033[1;%sm%s %s\033[0m" "$color" "$(date +"%H:%M:%S")" "$1"
+    printf "\033[1;%sm%s %s\033[0m" "$color" "$(/bin/date +"%H:%M:%S")" "$1"
     printf "\t| %s\n" "$data"
   done
 ) }
@@ -55,8 +55,14 @@ store_pid() {
 # This starts a command asynchronously and stores its pid in a list for use
 # later on in the script.
 start_command() {
+<<<<<<< HEAD
   ( eval "$1" 2>&1 ) | log "$2" &
   store_pid "$!"
+=======
+  $SHELL -c "$1" 2>&1 | log "$2" &
+  pid="$!"
+  store_pid "$pid"
+>>>>>>> Run commands as the user's default shell
 }
 
 # ## Reading the .env file
