@@ -70,6 +70,11 @@ roundup test/shoreman_test.sh
 
 * Chris Mytton ([@hecticjeff](https://github.com/hecticjeff))
 * Mickael Riga ([@mig-hub](https://github.com/mig-hub))
+* Matthew Johnston ([@warmwaffles](https://github.com/warmwaffles))
+* Dmitrij Mjakotnyi ([@kucaahbe](https://github.com/kucaahbe))
+* Stephen Paul Weber ([@singpolyma](https://github.com/singpolyma))
+* ryanrhee ([@ryanrhee](https://github.com/ryanrhee))
+* Lorenzo Giuliani ([@aliem](https://github.com/aliem))
 
 ## Credits
 
