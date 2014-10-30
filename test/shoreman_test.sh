@@ -1,33 +1,33 @@
 describe "Shoreman"
 
 it_displays_usage() {
-  usage=$(bash ./shoreman.sh --help | head -n1)
+  usage=$(./shoreman.sh --help | head -n1)
   test "$usage" = "Usage: shoreman [procfile|Procfile] [envfile|.env]"
 }
 
 it_runs_simple_processes() {
-  output=$(bash ./shoreman.sh 'test/fixtures/simple_procfile'; :)
+  output=$(./shoreman.sh 'test/fixtures/simple_procfile'; :)
   echo "$output" | grep -q "Hello"
 }
 
 it_passes_environment_variables_to_processes() {
-  output=$(FOO=bar bash ./shoreman.sh 'test/fixtures/environment_procfile'; :)
+  output=$(FOO=bar ./shoreman.sh 'test/fixtures/environment_procfile'; :)
   echo "$output" | grep -q "FOO = bar"
 }
 
 it_supports_dot_env_file() {
   cd "test/fixtures"
-  output=$(bash ../../shoreman.sh 'env_file_procfile'; :)
+  output=$(../../shoreman.sh 'env_file_procfile'; :)
   echo "$output" | grep -q "BAZ = baz"
 }
 
 it_can_pass_env_file_as_second_argument() {
-  output=$(bash ./shoreman.sh 'test/fixtures/env_file_arg_procfile' 'test/fixtures/env_file_arg'; :)
+  output=$(./shoreman.sh 'test/fixtures/env_file_arg_procfile' 'test/fixtures/env_file_arg'; :)
   echo "$output" | grep -q "MUZ = bar"
 }
 
 it_ignores_comments_in_env_file() {
   cd "test/fixtures"
-  output=$(bash ../../shoreman.sh 'commented_environment_procfile' 'env_file_with_comments'; :)
+  output=$(../../shoreman.sh 'commented_environment_procfile' 'env_file_with_comments'; :)
   echo "$output" | grep -q "42 does not contain: bar"
 }
