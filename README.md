@@ -2,7 +2,7 @@
 
 A shell implementation of the Procfile format.
 
-[![Build Status](https://travis-ci.org/hecticjeff/shoreman.png?branch=master)](https://travis-ci.org/hecticjeff/shoreman)
+[![Build Status](https://travis-ci.org/hecticjeff/shoreman.svg?branch=master)](https://travis-ci.org/hecticjeff/shoreman)
 
 ## Install
 
