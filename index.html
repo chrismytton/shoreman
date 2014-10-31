@@ -23,7 +23,9 @@
         
         
         
-          <div class='highlight'><pre><span class="shebang">#!/bin/sh</span></pre></div>
+          <div class='highlight'><pre><span class="hljs-shebang">#!/bin/sh
+
+</span></pre></div>
         
       
         
@@ -38,11 +40,11 @@ well as <a href="https://github.com/josh/norman">norman</a> for node.js.</p>
         <p>Make sure that any errors cause the script to exit immediately.</p>
 
         
-          <div class='highlight'><pre><span class="keyword">set</span> -e</pre></div>
+          <div class='highlight'><pre><span class="hljs-keyword">set</span> <span class="hljs-operator">-e</span></pre></div>
         
       
         
-        <h2>Usage</h2>
+        <h2 id="usage">Usage</h2>
 
         
       
@@ -50,12 +52,12 @@ well as <a href="https://github.com/josh/norman">norman</a> for node.js.</p>
         <p>Usage message that is displayed when <code>--help</code> is given as an argument.</p>
 
         
-          <div class='highlight'><pre>usage() {
-  <span class="keyword">echo</span> <span class="string">"Usage: shoreman [procfile|Procfile] [envfile|.env]"</span>
-  <span class="keyword">echo</span> <span class="string">"Run Procfiles using shell."</span>
-  <span class="keyword">echo</span>
-  <span class="keyword">echo</span> <span class="string">"The shoreman script reads commands from [procfile] and starts up the"</span>
-  <span class="keyword">echo</span> <span class="string">"processes that it describes."</span>
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">usage</span></span>() {
+  <span class="hljs-built_in">echo</span> <span class="hljs-string">"Usage: shoreman [procfile|Procfile] [envfile|.env]"</span>
+  <span class="hljs-built_in">echo</span> <span class="hljs-string">"Run Procfiles using shell."</span>
+  <span class="hljs-built_in">echo</span>
+  <span class="hljs-built_in">echo</span> <span class="hljs-string">"The shoreman script reads commands from [procfile] and starts up the"</span>
+  <span class="hljs-built_in">echo</span> <span class="hljs-string">"processes that it describes."</span>
 }</pre></div>
         
       
@@ -63,14 +65,14 @@ well as <a href="https://github.com/josh/norman">norman</a> for node.js.</p>
         <p>If the —help option is given, show the usage message and exit.</p>
 
         
-          <div class='highlight'><pre>expr -- <span class="string">"$*"</span> : <span class="string">".*--help"</span> &gt;/dev/null &amp;&amp; {
+          <div class='highlight'><pre>expr -- <span class="hljs-string">"$*"</span> : <span class="hljs-string">".*--help"</span> &gt;/dev/null &amp;&amp; {
   usage
-  <span class="keyword">exit</span> 0
+  <span class="hljs-keyword">exit</span> <span class="hljs-number">0</span>
 }</pre></div>
         
       
         
-        <h2>Logging</h2>
+        <h2 id="logging">Logging</h2>
 
         
       
@@ -80,7 +82,7 @@ as the process name. This takes one argument, the name of the process, and
 then reads data from stdin, formats it, and sends it to stdout.</p>
 
         
-          <div class='highlight'><pre>log() { (</pre></div>
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">log</span></span>() { (</pre></div>
         
       
         
@@ -89,18 +91,18 @@ bunch of variables, we will simply calculate what color the process will get
 base on its PID</p>
 
         
-          <div class='highlight'><pre>  color=$((31 + ($! % 7)))
+          <div class='highlight'><pre>  color=$((<span class="hljs-number">31</span> + ($! % <span class="hljs-number">7</span>)))
 
-  <span class="keyword">while</span> read -r data
-  <span class="keyword">do</span>
-    printf <span class="string">"\033[1;%sm%s %s\033[0m"</span> <span class="string">"<span class="variable">$color</span>"</span> <span class="string">"$(date +"</span>%H:%M:%S<span class="string">")"</span> <span class="string">"<span class="variable">$1</span>"</span>
-    printf <span class="string">"\t| %s\n"</span> <span class="string">"<span class="variable">$data</span>"</span>
-  <span class="keyword">done</span>
+  <span class="hljs-keyword">while</span> <span class="hljs-built_in">read</span> -r data
+  <span class="hljs-keyword">do</span>
+    <span class="hljs-built_in">printf</span> <span class="hljs-string">"\033[1;%sm%s %s\033[0m"</span> <span class="hljs-string">"<span class="hljs-variable">$color</span>"</span> <span class="hljs-string">"<span class="hljs-variable">$(date +"%H:%M:%S")</span>"</span> <span class="hljs-string">"<span class="hljs-variable">$1</span>"</span>
+    <span class="hljs-built_in">printf</span> <span class="hljs-string">"\t| %s\n"</span> <span class="hljs-string">"<span class="hljs-variable">$data</span>"</span>
+  <span class="hljs-keyword">done</span>
 ) }</pre></div>
         
       
         
-        <h2>Running commands</h2>
+        <h2 id="running-commands">Running commands</h2>
 
         
       
@@ -110,8 +112,8 @@ base on its PID</p>
 for it to finish before exiting the parent process.</p>
 
         
-          <div class='highlight'><pre>store_pid() {
-  pids=<span class="string">"<span class="variable">$pids</span> <span class="variable">$1</span>"</span>
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">store_pid</span></span>() {
+  pids=<span class="hljs-string">"<span class="hljs-variable">$pids</span> <span class="hljs-variable">$1</span>"</span>
 }</pre></div>
         
       
@@ -120,14 +122,14 @@ for it to finish before exiting the parent process.</p>
 later on in the script.</p>
 
         
-          <div class='highlight'><pre>start_command() {
-  ( eval <span class="string">"<span class="variable">$1</span>"</span> 2&gt;&amp;1 ) | log <span class="string">"<span class="variable">$2</span>"</span> &amp;
-  store_pid <span class="string">"$!"</span>
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">start_command</span></span>() {
+  ( <span class="hljs-built_in">eval</span> <span class="hljs-string">"<span class="hljs-variable">$1</span>"</span> <span class="hljs-number">2</span>&gt;&amp;<span class="hljs-number">1</span> ) | log <span class="hljs-string">"<span class="hljs-variable">$2</span>"</span> &amp;
+  store_pid <span class="hljs-string">"$!"</span>
 }</pre></div>
         
       
         
-        <h2>Reading the .env file</h2>
+        <h2 id="reading-the-env-file">Reading the .env file</h2>
 
         
       
@@ -135,7 +137,7 @@ later on in the script.</p>
         <p>Set a default port before loading the .env file</p>
 
         
-          <div class='highlight'><pre>PORT=<span class="variable">${PORT:-5000}</span></pre></div>
+          <div class='highlight'><pre>PORT=<span class="hljs-variable">${PORT:-5000}</span></pre></div>
         
       
         
@@ -144,14 +146,14 @@ Shell-style comments are permitted.</p>
 
         
           <div class='highlight'><pre>
-ENV_FILE=<span class="variable">${2:-'.env'}</span>
-<span class="keyword">if</span> <span class="test_condition">[ -f <span class="variable">$ENV_FILE</span> ]</span>; <span class="keyword">then</span>
-  export $(cat <span class="string">"<span class="variable">$ENV_FILE</span>"</span> | grep <span class="string">"^[^#]*=.*"</span> | xargs)
-<span class="keyword">fi</span></pre></div>
+ENV_FILE=<span class="hljs-variable">${2:-'.env'}</span>
+<span class="hljs-keyword">if</span> [ <span class="hljs-operator">-f</span> <span class="hljs-variable">$ENV_FILE</span> ]; <span class="hljs-keyword">then</span>
+  <span class="hljs-keyword">export</span> $(cat <span class="hljs-string">"<span class="hljs-variable">$ENV_FILE</span>"</span> | grep <span class="hljs-string">"^[^#]*=.*"</span> | xargs)
+<span class="hljs-keyword">fi</span></pre></div>
         
       
         
-        <h2>Reading the Procfile</h2>
+        <h2 id="reading-the-procfile">Reading the Procfile</h2>
 
         
       
@@ -160,17 +162,17 @@ ENV_FILE=<span class="variable">${2:-'.env'}</span>
 The file is given on stdin, see the <code>&lt;</code> at the end of this while loop.</p>
 
         
-          <div class='highlight'><pre>PROCFILE=<span class="variable">${1:-'Procfile'}</span>
-<span class="keyword">while</span> read line || <span class="test_condition">[ -n <span class="string">"<span class="variable">$line</span>"</span> ]</span>; <span class="keyword">do</span>
-  name=<span class="variable">${line%%:*}</span>
-  command=<span class="variable">${line#*:[[:space:]]}</span>
-  start_command <span class="string">"<span class="variable">$command</span>"</span> <span class="string">"<span class="variable">${name}</span>"</span>
-  <span class="keyword">echo</span> <span class="string">"'<span class="variable">${command}</span>' started with pid $!"</span> | log <span class="string">"<span class="variable">${name}</span>"</span>
-<span class="keyword">done</span> &lt; <span class="string">"<span class="variable">$PROCFILE</span>"</span></pre></div>
+          <div class='highlight'><pre>PROCFILE=<span class="hljs-variable">${1:-'Procfile'}</span>
+<span class="hljs-keyword">while</span> <span class="hljs-built_in">read</span> line || [ -n <span class="hljs-string">"<span class="hljs-variable">$line</span>"</span> ]; <span class="hljs-keyword">do</span>
+  name=<span class="hljs-variable">${line%%:*}</span>
+  command=<span class="hljs-variable">${line#*:[[:space:]]}</span>
+  start_command <span class="hljs-string">"<span class="hljs-variable">$command</span>"</span> <span class="hljs-string">"<span class="hljs-variable">${name}</span>"</span>
+  <span class="hljs-built_in">echo</span> <span class="hljs-string">"'<span class="hljs-variable">${command}</span>' started with pid $!"</span> | log <span class="hljs-string">"<span class="hljs-variable">${name}</span>"</span>
+<span class="hljs-keyword">done</span> &lt; <span class="hljs-string">"<span class="hljs-variable">$PROCFILE</span>"</span></pre></div>
         
       
         
-        <h2>Cleanup</h2>
+        <h2 id="cleanup">Cleanup</h2>
 
         
       
@@ -180,11 +182,11 @@ child processes. The sleep stops STDOUT from pouring over the prompt, it
 should probably go at some point.</p>
 
         
-          <div class='highlight'><pre>onexit() {
-  <span class="keyword">echo</span> SIGINT received
-  <span class="keyword">echo</span> sending SIGTERM to all processes
-  kill <span class="variable">$pids</span> &gt; /dev/null 2&gt;&amp;1
-  sleep 1
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">onexit</span></span>() {
+  <span class="hljs-built_in">echo</span> SIGINT received
+  <span class="hljs-built_in">echo</span> sending SIGTERM to all processes
+  kill <span class="hljs-variable">$pids</span> &gt; /dev/null <span class="hljs-number">2</span>&gt;&amp;<span class="hljs-number">1</span>
+  sleep <span class="hljs-number">1</span>
 }
 trap onexit INT TERM EXIT</pre></div>
         
