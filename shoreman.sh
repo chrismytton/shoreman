@@ -79,7 +79,7 @@ fi
 PROCFILE=${1:-'Procfile'}
 while read line || [ -n "$line" ]; do
   name=${line%%:*}
-  command=${line#*: }
+  command=${line#*:[[:space:]]}
   start_command "$command" "${name}"
   echo "'${command}' started with pid $!" | log "${name}"
 done < "$PROCFILE"

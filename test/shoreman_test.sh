@@ -41,3 +41,10 @@ it_allows_overriding_the_port_number() {
   output=$(PORT=5555 ./shoreman.sh 'test/fixtures/port_number_procfile'; :)
   echo "$output" | grep -q "5555"
 }
+
+it_allows_tabs_in_procfile() {
+  output=$(./shoreman.sh 'test/fixtures/tabs_procfile'; :)
+  echo "$output"
+  not_found='command not found'
+  test "${output#*$not_found}" == "$output"
+}
