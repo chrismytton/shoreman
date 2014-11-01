@@ -68,8 +68,8 @@ PORT=${PORT:-5000}
 # Shell-style comments are permitted.
 
 ENV_FILE=${2:-'.env'}
-if [ -f $ENV_FILE ]; then
-  export $(cat "$ENV_FILE" | grep "^[^#]*=.*" | xargs)
+if [ -f "$ENV_FILE" ]; then
+  export $(grep "^[^#]*=.*" "$ENV_FILE" | xargs)
 fi
 
 # ## Reading the Procfile
@@ -92,7 +92,7 @@ done < "$PROCFILE"
 onexit() {
   echo SIGINT received
   echo sending SIGTERM to all processes
-  kill $pids > /dev/null 2>&1
+  kill "$pids" > /dev/null 2>&1
   sleep 1
 }
 trap onexit INT TERM EXIT
