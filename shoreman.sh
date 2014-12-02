@@ -76,25 +76,25 @@ fi
 
 # The Procfile needs to be parsed to extract the process names and commands.
 # The file is given on stdin, see the `<` at the end of this while loop.
-commands=( "$@" )
 should_start_command() {
-  local command
-  if test "${#commands[@]}" -eq 0; then
+  local command="$1"; shift
+  if test "$#" -eq 0; then
     return 0
   fi
-  for command in "${commands[@]}"; do
-    if test "$command" = "$1"; then
+  for e in "$@"; do
+    if test "$e" = "$command"; then
       return 0
     fi
   done
   unset command
   return 1
 }
+
 PROCFILE=${PROCFILE:-'Procfile'}
 while read line || [ -n "$line" ]; do
   name=${line%%:*}
   command=${line#*:[[:space:]]}
-  if should_start_command "$name"; then
+  if should_start_command "$name" "$@"; then
     start_command "$command" "$name"
     echo "'${command}' started with pid $!" | log "${name}"
   fi
