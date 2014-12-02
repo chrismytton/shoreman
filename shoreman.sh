@@ -12,10 +12,10 @@ set -e
 
 # Usage message that is displayed when `--help` is given as an argument.
 usage() {
-  echo "Usage: shoreman [procfile|Procfile] [envfile|.env]"
+  echo "Usage: shoreman [processes]"
   echo "Run Procfiles using shell."
   echo
-  echo "The shoreman script reads commands from [procfile] and starts up the"
+  echo "The shoreman script reads commands from Procfile and starts up the"
   echo "processes that it describes."
 }
 
@@ -67,7 +67,7 @@ PORT=${PORT:-5000}
 # The .env file needs to be a list of assignments like in a shell script.
 # Shell-style comments are permitted.
 
-ENV_FILE=${2:-'.env'}
+ENV_FILE=${ENV_FILE:-'.env'}
 if [ -f "$ENV_FILE" ]; then
   export $(grep "^[^#]*=.*" "$ENV_FILE" | xargs)
 fi
@@ -76,12 +76,28 @@ fi
 
 # The Procfile needs to be parsed to extract the process names and commands.
 # The file is given on stdin, see the `<` at the end of this while loop.
-PROCFILE=${1:-'Procfile'}
+should_start_command() {
+  local command="$1"; shift
+  if test "$#" -eq 0; then
+    return 0
+  fi
+  for e in "$@"; do
+    if test "$e" = "$command"; then
+      return 0
+    fi
+  done
+  unset command
+  return 1
+}
+
+PROCFILE=${PROCFILE:-'Procfile'}
 while read line || [ -n "$line" ]; do
   name=${line%%:*}
   command=${line#*:[[:space:]]}
-  start_command "$command" "${name}"
-  echo "'${command}' started with pid $!" | log "${name}"
+  if should_start_command "$name" "$@"; then
+    start_command "$command" "$name"
+    echo "'${command}' started with pid $!" | log "${name}"
+  fi
 done < "$PROCFILE"
 
 # ## Cleanup
