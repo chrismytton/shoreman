@@ -55,7 +55,7 @@ store_pid() {
 # This starts a command asynchronously and stores its pid in a list for use
 # later on in the script.
 start_command() {
-  ( eval "$1" 2>&1 ) | log "$2" &
+  sh -c "$1" &
   store_pid "$!"
 }
 
@@ -92,7 +92,7 @@ done < "$PROCFILE"
 onexit() {
   echo SIGINT received
   echo sending SIGTERM to all processes
-  kill "$pids" > /dev/null 2>&1
+  kill $pids
   sleep 1
 }
 trap onexit INT TERM EXIT
