@@ -51,7 +51,6 @@ make
 
 ## Todo
 
-* Add proper logging so it's clear what's coming from where.
 * Add concurrency controls for process types.
 
 ## Contributors
@@ -63,6 +62,7 @@ make
 * Stephen Paul Weber ([@singpolyma](https://github.com/singpolyma))
 * ryanrhee ([@ryanrhee](https://github.com/ryanrhee))
 * Lorenzo Giuliani ([@aliem](https://github.com/aliem))
+* KOSEKI Kengo ([@koseki](https://github.com/koseki))
 
 ## Credits
 
