@@ -1,0 +1,5 @@
+# comment that could look like command:
+# foo: echo 'abc'
+  # bar: echo 'def'
+
+baz: echo 'ghi'

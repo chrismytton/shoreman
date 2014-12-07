@@ -77,7 +77,8 @@ load_env_file() {
 # The file is given on stdin, see the `<` at the end of this while loop.
 run_procfile() {
   local procfile=${1:-'Procfile'}
-  while read line || [ -n "$line" ]; do
+  while read line || [[ -n "$line" ]]; do
+    if [[ -z "$line" ]] || [[ "$line" == \#* ]]; then continue; fi
     local name="${line%%:*}"
     local command="${line#*:[[:space:]]}"
     start_command "$command" "${name}"
