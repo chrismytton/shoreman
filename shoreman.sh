@@ -52,7 +52,7 @@ store_pid() {
 # later on in the script.
 start_command() {
   sh -c "$1" 2>&1 | log "$2" &
-  pid=$(jobs -p %)
+  pid=$(jobs -p %%)
   store_pid $pid
 }
 
