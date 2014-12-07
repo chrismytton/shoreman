@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # [shoreman](https://github.com/hecticjeff/shoreman) is an
 # implementation of the **Procfile** format. Inspired by the original
@@ -51,7 +51,7 @@ store_pid() {
 # This starts a command asynchronously and stores its pid in a list for use
 # later on in the script.
 start_command() {
-  sh -c "$1" 2>&1 | log "$2" &
+  bash -c "$1" 2>&1 | log "$2" &
   pid=$(jobs -p %%)
   store_pid $pid
 }
