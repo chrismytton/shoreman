@@ -7,7 +7,7 @@
 
 # Make sure that any errors cause the script to exit immediately.
 set -eo pipefail
-[ "$TRACE" ] && set -x
+[[ "$TRACE" ]] && set -x
 
 # ## Usage
 
@@ -30,7 +30,7 @@ log() {
   # Bash colors start from 31 up to 38. Instead of a hash set and storing a
   # bunch of variables, we will simply calculate what color the process will get
   # base on its PID
-  local color=$((31 + (pid % 7)))
+  local color="$((31 + (pid % 7)))"
 
   while read -r data
   do
@@ -52,8 +52,8 @@ store_pid() {
 # later on in the script.
 start_command() {
   bash -c "$1" 2>&1 | log "$2" &
-  pid=$(jobs -p %%)
-  store_pid $pid
+  pid="$(jobs -p %%)"
+  store_pid "$pid"
 }
 
 # ## Reading the .env file
@@ -61,12 +61,13 @@ start_command() {
 # The .env file needs to be a list of assignments like in a shell script.
 # Shell-style comments are permitted.
 load_env_file() {
+  local env_file=${1:-'.env'}
+
   # Set a default port before loading the .env file
   export PORT=${PORT:-5000}
 
-  ENV_FILE=${1:-'.env'}
-  if [ -f "$ENV_FILE" ]; then
-    export $(grep "^[^#]*=.*" "$ENV_FILE" | xargs)
+  if [[ -f "$env_file" ]]; then
+    export $(grep "^[^#]*=.*" "$env_file" | xargs)
   fi
 }
 
@@ -90,8 +91,8 @@ run_procfile() {
 # child processes. The sleep stops STDOUT from pouring over the prompt, it
 # should probably go at some point.
 onexit() {
-  echo SIGINT received
-  echo sending SIGTERM to all processes
+  echo "SIGINT received"
+  echo "sending SIGTERM to all processes"
   kill $pids
   sleep 1
 }
