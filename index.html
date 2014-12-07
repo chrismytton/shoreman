@@ -23,7 +23,7 @@
         
         
         
-          <div class='highlight'><pre><span class="shebang">#!/bin/sh</span></pre></div>
+          <div class='highlight'><pre><span class="shebang">#!/bin/bash</span></pre></div>
         
       
         
@@ -38,8 +38,8 @@ well as <a href="https://github.com/josh/norman">norman</a> for node.js.</p>
         <p>Make sure that any errors cause the script to exit immediately.</p>
 
         
-          <div class='highlight'><pre><span class="keyword">set</span> -e
-<span class="test_condition">[ <span class="string">"<span class="variable">$TRACE</span>"</span> ]</span> &amp;&amp; <span class="keyword">set</span> -x</pre></div>
+          <div class='highlight'><pre><span class="keyword">set</span> -eo pipefail
+<span class="test_condition">[[ <span class="string">"<span class="variable">$TRACE</span>"</span> ]]</span> &amp;&amp; <span class="keyword">set</span> -x</pre></div>
         
       
         
@@ -81,7 +81,7 @@ bunch of variables, we will simply calculate what color the process will get
 base on its PID</p>
 
         
-          <div class='highlight'><pre>  local color=$((31 + (pid % 7)))
+          <div class='highlight'><pre>  local color=<span class="string">"$((31 + (pid % 7)))"</span>
 
   <span class="keyword">while</span> read -r data
   <span class="keyword">do</span>
@@ -113,8 +113,9 @@ later on in the script.</p>
 
         
           <div class='highlight'><pre>start_command() {
-  sh -c <span class="string">"<span class="variable">$1</span>"</span> &amp;
-  store_pid <span class="string">"$!"</span>
+  bash -c <span class="string">"<span class="variable">$1</span>"</span> 2&gt;&amp;1 | log <span class="string">"<span class="variable">$2</span>"</span> &amp;
+  pid=<span class="string">"$(jobs -p %%)"</span>
+  store_pid <span class="string">"<span class="variable">$pid</span>"</span>
 }</pre></div>
         
       
@@ -128,7 +129,8 @@ later on in the script.</p>
 Shell-style comments are permitted.</p>
 
         
-          <div class='highlight'><pre>load_env_file() {</pre></div>
+          <div class='highlight'><pre>load_env_file() {
+  local env_file=<span class="variable">${1:-'.env'}</span></pre></div>
         
       
         
@@ -137,9 +139,8 @@ Shell-style comments are permitted.</p>
         
           <div class='highlight'><pre>  export PORT=<span class="variable">${PORT:-5000}</span>
 
-  ENV_FILE=<span class="variable">${1:-'.env'}</span>
-  <span class="keyword">if</span> <span class="test_condition">[ -f <span class="string">"<span class="variable">$ENV_FILE</span>"</span> ]</span>; <span class="keyword">then</span>
-    export $(grep <span class="string">"^[^#]*=.*"</span> <span class="string">"<span class="variable">$ENV_FILE</span>"</span> | xargs)
+  <span class="keyword">if</span> <span class="test_condition">[[ -f <span class="string">"<span class="variable">$env_file</span>"</span> ]]</span>; <span class="keyword">then</span>
+    export $(grep <span class="string">"^[^#]*=.*"</span> <span class="string">"<span class="variable">$env_file</span>"</span> | xargs)
   <span class="keyword">fi</span>
 }</pre></div>
         
@@ -160,7 +161,7 @@ The file is given on stdin, see the <code>&lt;</code> at the end of this while l
     local name=<span class="string">"<span class="variable">${line%%:*}</span>"</span>
     local command=<span class="string">"<span class="variable">${line#*:[[:space:]]}</span>"</span>
     start_command <span class="string">"<span class="variable">$command</span>"</span> <span class="string">"<span class="variable">${name}</span>"</span>
-    <span class="keyword">echo</span> <span class="string">"'<span class="variable">${command}</span>' started with pid $!"</span> | log <span class="string">"<span class="variable">${name}</span>"</span>
+    <span class="keyword">echo</span> <span class="string">"'<span class="variable">${command}</span>' started with pid <span class="variable">$pid</span>"</span> | log <span class="string">"<span class="variable">${name}</span>"</span>
   <span class="keyword">done</span> &lt; <span class="string">"<span class="variable">$procfile</span>"</span>
 }</pre></div>
         
@@ -177,8 +178,8 @@ should probably go at some point.</p>
 
         
           <div class='highlight'><pre>onexit() {
-  <span class="keyword">echo</span> SIGINT received
-  <span class="keyword">echo</span> sending SIGTERM to all processes
+  <span class="keyword">echo</span> <span class="string">"SIGINT received"</span>
+  <span class="keyword">echo</span> <span class="string">"sending SIGTERM to all processes"</span>
   kill <span class="variable">$pids</span>
   sleep 1
 }
