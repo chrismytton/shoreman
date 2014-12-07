@@ -3,5 +3,5 @@ install:
   - sudo apt-get install -y devscripts
 
 script:
-  - checkbashisms shoreman.sh
+  - test/checkbashisms.pl shoreman.sh
   - make test
