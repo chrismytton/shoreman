@@ -6,7 +6,7 @@
 # well as [norman](https://github.com/josh/norman) for node.js.
 
 # Make sure that any errors cause the script to exit immediately.
-set -e
+set -eo pipefail
 [ "$TRACE" ] && set -x
 
 # ## Usage
