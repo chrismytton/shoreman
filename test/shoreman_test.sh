@@ -48,3 +48,12 @@ it_allows_tabs_in_procfile() {
   not_found='command not found'
   test "${output#*$not_found}" == "$output"
 }
+
+it_ignores_comments_in_proc_file() {
+  output=$(./shoreman.sh 'test/fixtures/proc_file_with_comments'; :)
+  line0=$(echo "$output" | wc -l)
+  line1=$(echo "$output" | grep "abc" | wc -l)
+  line2=$(echo "$output" | grep "def" | wc -l)
+  line3=$(echo "$output" | grep "ghi" | wc -l)
+  [ $line0 -eq 2 -a $line1 -eq 0 -a $line2 -eq 0 -a $line3 -eq 2 ]
+}
