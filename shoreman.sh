@@ -93,8 +93,9 @@ run_procfile() {
 # should probably go at some point.
 onexit() {
   echo "SIGINT received"
+  trap - INT TERM # Clear all traps
   echo "sending SIGTERM to all processes"
-  kill $pids
+  kill -TERM 0 # Kill all subprocesses and self
   sleep 1
 }
 
