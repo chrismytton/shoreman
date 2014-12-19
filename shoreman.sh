@@ -74,16 +74,23 @@ load_env_file() {
 # ## Reading the Procfile
 
 # The Procfile needs to be parsed to extract the process names and commands.
-# The file is given on stdin, see the `<` at the end of this while loop.
 run_procfile() {
   local procfile=${1:-'Procfile'}
-  while read line || [[ -n "$line" ]]; do
+  local IFS=$'\n'
+  local lines=( $(< "$procfile") )
+  local line=''
+
+  for line in "${lines[@]}"; do
+    # trim
+    line="${line#"${line%%[![:space:]]*}"}"
+    line="${line%"${line##*[![:space:]]}"}"
+
     if [[ -z "$line" ]] || [[ "$line" == \#* ]]; then continue; fi
     local name="${line%%:*}"
     local command="${line#*:[[:space:]]}"
     start_command "$command" "${name}"
     echo "'${command}' started with pid $pid" | log "${name}"
-  done < "$procfile"
+  done
 }
 
 # ## Cleanup
