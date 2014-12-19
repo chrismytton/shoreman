@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# [shoreman](https://github.com/hecticjeff/shoreman) is an
+# [shoreman](https://github.com/chrismytton/shoreman) is an
 # implementation of the **Procfile** format. Inspired by the original
 # [foreman](http://ddollar.github.com/foreman/) tool for ruby, as
 # well as [norman](https://github.com/josh/norman) for node.js.

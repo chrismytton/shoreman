@@ -2,7 +2,7 @@
 
 A shell implementation of the Procfile format.
 
-[![Build Status](https://travis-ci.org/hecticjeff/shoreman.svg?branch=master)](https://travis-ci.org/hecticjeff/shoreman)
+[![Build Status](https://travis-ci.org/chrismytton/shoreman.svg?branch=master)](https://travis-ci.org/chrismytton/shoreman)
 
 ## Install
 
@@ -12,13 +12,13 @@ Install as a standalone, change `~/bin/` to any other directory that's
 in your `$PATH` if you wish.
 
 ```
-curl https://github.com/hecticjeff/shoreman/raw/master/shoreman.sh -sLo ~/bin/shoreman && \
+curl https://github.com/chrismytton/shoreman/raw/master/shoreman.sh -sLo ~/bin/shoreman && \
 chmod 755 ~/bin/shoreman
 ```
 
 ### Homebrew
 
-    brew install --HEAD hecticjeff/formula/shoreman
+    brew install --HEAD chrismytton/formula/shoreman
 
 ## Usage
 
@@ -55,7 +55,7 @@ make
 
 ## Contributors
 
-* Chris Mytton ([@hecticjeff](https://github.com/hecticjeff))
+* Chris Mytton ([@chrismytton](https://github.com/chrismytton))
 * Mickael Riga ([@mig-hub](https://github.com/mig-hub))
 * Matthew Johnston ([@warmwaffles](https://github.com/warmwaffles))
 * Dmitrij Mjakotnyi ([@kucaahbe](https://github.com/kucaahbe))
