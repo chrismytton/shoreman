@@ -77,17 +77,17 @@ load_env_file() {
 run_procfile() {
   local procfile=${1:-'Procfile'}
   local IFS=$'\n'
-  local lines=( $(< "$procfile") )
+  local lines=( $(grep "^[A-Za-z0-9_-]\{1,\}:[:space:]*.\{1,\}" "$procfile") )
   local line=''
 
   for line in "${lines[@]}"; do
-    # trim
-    line="${line#"${line%%[![:space:]]*}"}"
-    line="${line%"${line##*[![:space:]]}"}"
-
-    if [[ -z "$line" ]] || [[ "$line" == \#* ]]; then continue; fi
     local name="${line%%:*}"
-    local command="${line#*:[[:space:]]}"
+    local command="${line#*:}"
+
+    # trim
+    command="${command#"${command%%[![:space:]]*}"}"
+    command="${command%"${command##*[![:space:]]}"}"
+
     start_command "$command" "${name}"
     echo "'${command}' started with pid $pid" | log "${name}"
   done
