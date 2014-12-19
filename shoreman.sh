@@ -77,7 +77,7 @@ load_env_file() {
 run_procfile() {
   local procfile=${1:-'Procfile'}
   local IFS=$'\n'
-  local lines=( $(grep "^[A-Za-z0-9_-]\{1,\}:[:space:]*.\{1,\}" "$procfile") )
+  local lines=( $(grep "^[A-Za-z0-9_-]\{1,\}:[[:space:]]*.\{1,\}" "$procfile") )
   local line=''
 
   for line in "${lines[@]}"; do
