@@ -1,0 +1,10 @@
+# comment that could look like command:
+# foo: echo 'abc'
+  # bar: echo 'def'
+ignored : line
+ignor ed: line
+ignored,: line
+  ignored: line
+
+baz: echo 'ghi'
+no-space_:sh -c "echo 'no' && echo 'space\\'"

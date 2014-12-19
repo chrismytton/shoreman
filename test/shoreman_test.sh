@@ -49,11 +49,13 @@ it_allows_tabs_in_procfile() {
   test "${output#*$not_found}" == "$output"
 }
 
-it_ignores_comments_in_proc_file() {
-  output=$(./shoreman.sh 'test/fixtures/proc_file_with_comments'; :)
+it_is_compatible_with_foreman() {
+  output=$(./shoreman.sh 'test/fixtures/foreman_compatible'; :)
   line0=$(echo "$output" | wc -l)
   line1=$(echo "$output" | grep "abc" | wc -l)
   line2=$(echo "$output" | grep "def" | wc -l)
   line3=$(echo "$output" | grep "ghi" | wc -l)
-  [ $line0 -eq 2 -a $line1 -eq 0 -a $line2 -eq 0 -a $line3 -eq 2 ]
+  line4=$(echo "$output" | grep "no-space_" | wc -l)
+  line5=$(echo "$output" | grep "space\\\\" | wc -l)
+  [ $line0 -eq 5 -a $line1 -eq 0 -a $line2 -eq 0 -a $line3 -eq 2 -a $line4 -eq 3 -a $line5 -eq 2 ]
 }
