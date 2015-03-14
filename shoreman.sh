@@ -23,18 +23,18 @@ usage() {
 # ## Logging
 
 # For logging we want to prefix each entry with the current time, as well
-# as the process name. This takes one argument, the name of the process, and
-# then reads data from stdin, formats it, and sends it to stdout.
+# as the process name. This takes two arguments, the name of the process
+# with its index, and then reads data from stdin, formats it, and sends it
+# to stdout.
 log() {
-  local pid="$!"
-  # Bash colors start from 31 up to 38. Instead of a hash set and storing a
-  # bunch of variables, we will simply calculate what color the process will get
-  # base on its PID
-  local color="$((31 + (pid % 7)))"
+  local index="$2"
+  # Bash colors start from 31 up to 37. We calculate what color the process
+  # gets based on its index.
+  local color="$((31 + (index % 7)))"
 
   while read -r data
   do
-    printf "\033[1;%sm%s %s\033[0m" "$color" "$(date +"%H:%M:%S")" "$1"
+    printf "\033[0;%sm%s %s\033[0m" "$color" "$(date +"%H:%M:%S")" "$1"
     printf "\t| %s\n" "$data"
   done
 }
@@ -51,7 +51,7 @@ store_pid() {
 # This starts a command asynchronously and stores its pid in a list for use
 # later on in the script.
 start_command() {
-  bash -c "$1" 2>&1 | log "$2" &
+  bash -c "$1" 2>&1 | log "$2" "$3" &
   pid="$(jobs -p %%)"
   store_pid "$pid"
 }
@@ -77,12 +77,16 @@ load_env_file() {
 # The file is given on stdin, see the `<` at the end of this while loop.
 run_procfile() {
   local procfile=${1:-'Procfile'}
+  # We give each process an index to track its color. We start with 1,
+  # because it corresponds to green which is easier on the eye than red (0).
+  local index=1
   while read line || [[ -n "$line" ]]; do
     if [[ -z "$line" ]] || [[ "$line" == \#* ]]; then continue; fi
     local name="${line%%:*}"
     local command="${line#*:[[:space:]]}"
-    start_command "$command" "${name}"
-    echo "'${command}' started with pid $pid" | log "${name}"
+    start_command "$command" "${name}" "$index"
+    echo "'${command}' started with pid $pid" | log "${name}" "$index"
+    index=$((index + 1))
   done < "$procfile"
 }
 
