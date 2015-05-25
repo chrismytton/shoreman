@@ -57,3 +57,14 @@ it_ignores_comments_in_proc_file() {
   line3=$(echo "$output" | grep "ghi" | wc -l)
   [ $line0 -eq 2 -a $line1 -eq 0 -a $line2 -eq 0 -a $line3 -eq 2 ]
 }
+
+it_doesnt_intermix_output() {
+  output=$(./shoreman.sh 'test/fixtures/fast_procfile'; :)
+  bad=$(echo "$output" | grep -v '^\d\d:\d\d:\d\d \d[[:space:]]|' | wc -l)
+  [ $bad -eq 0 ]
+}
+
+it_can_force_colors_on() {
+  output=$(SHOREMAN_COLORS=always ./shoreman.sh 'test/fixtures/simple_procfile'; :)
+  echo "$output" | grep -q $(printf "\033")
+}
