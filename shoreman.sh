@@ -36,7 +36,7 @@ log() {
     # Bash colors start from 31 up to 37. We calculate what color the process
     # gets based on its index.
     local color="$((31 + (index % 7)))"
-    format=$(printf "\033[0;%sm%%s %%s\t|\033[0m %%s" "$color")
+    format="\033[0;${color}m%s %s\t|\033[0m %s"
   fi
 
   while read -r data
