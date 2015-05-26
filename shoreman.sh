@@ -28,14 +28,20 @@ usage() {
 # to stdout.
 log() {
   local index="$2"
-  # Bash colors start from 31 up to 37. We calculate what color the process
-  # gets based on its index.
-  local color="$((31 + (index % 7)))"
+  local format="%s %s\t| %s"
+
+  # We add colors when output is a terminal. `SHOREMAN_COLORS` can override it.
+  if [ -t 1 -o "$SHOREMAN_COLORS" == "always" ] \
+     && [ "$SHOREMAN_COLORS" != "never" ]; then
+    # Bash colors start from 31 up to 37. We calculate what color the process
+    # gets based on its index.
+    local color="$((31 + (index % 7)))"
+    format="\033[0;${color}m%s %s\t|\033[0m %s"
+  fi
 
   while read -r data
   do
-    printf "\033[0;%sm%s %s\033[0m" "$color" "$(date +"%H:%M:%S")" "$1"
-    printf "\t| %s\n" "$data"
+    printf "$format\n" "$(date +"%H:%M:%S")" "$1" "$data"
   done
 }
 
