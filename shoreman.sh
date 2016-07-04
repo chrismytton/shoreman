@@ -88,7 +88,11 @@ run_procfile() {
   local index=1
   while read line || [[ -n "$line" ]]; do
     if [[ -z "$line" ]] || [[ "$line" == \#* ]]; then continue; fi
-    local name="${line%%:*}"
+    local name="${line%%:*}" && {
+        if [[ -n $program_name ]] && [[ "$name"x != "$program_name"x ]]; then
+            continue
+        fi
+    }
     local command="${line#*:[[:space:]]}"
     start_command "$command" "${name}" "$index"
     echo "'${command}' started with pid $pid" | log "${name}" "$index"
@@ -111,6 +115,7 @@ onexit() {
 main() {
   local procfile="$1"
   local env_file="$2"
+  local program_name="$3"
 
   # If the --help option is given, show the usage message and exit.
   expr -- "$*" : ".*--help" >/dev/null && {
@@ -119,7 +124,7 @@ main() {
   }
 
   load_env_file "$env_file"
-  run_procfile "$procfile"
+  run_procfile "$procfile" "$program_name"
 
   trap onexit INT TERM
 
