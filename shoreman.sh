@@ -82,7 +82,7 @@ load_env_file() {
 # The Procfile needs to be parsed to extract the process names and commands.
 # The file is given on stdin, see the `<` at the end of this while loop.
 run_procfile() {
-  local procfile=${1:-'Procfile'}
+  local procfile=$(<${1:-'Procfile'})
   # We give each process an index to track its color. We start with 1,
   # because it corresponds to green which is easier on the eye than red (0).
   local index=1
@@ -93,7 +93,7 @@ run_procfile() {
     start_command "$command" "${name}" "$index"
     echo "'${command}' started with pid $pid" | log "${name}" "$index"
     index=$((index + 1))
-  done < "$procfile"
+  done <<< "$procfile"
 }
 
 # ## Cleanup
