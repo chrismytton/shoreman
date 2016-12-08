@@ -85,6 +85,10 @@ run_procfile() {
   local procfile=${1:-'Procfile'}
   # We give each process an index to track its color. We start with 1,
   # because it corresponds to green which is easier on the eye than red (0).
+  if [ ! -f "$procfile" ]; then
+    echo "$procfile doesn't exist !"
+    return 1
+  fi
   local index=1
   while read line || [[ -n "$line" ]]; do
     if [[ -z "$line" ]] || [[ "$line" == \#* ]]; then continue; fi
