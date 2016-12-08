@@ -60,8 +60,8 @@ it_ignores_comments_in_proc_file() {
 
 it_doesnt_intermix_output() {
   output=$(./shoreman.sh 'test/fixtures/fast_procfile'; :)
-  bad=$(echo "$output" | grep -v '^\d\d:\d\d:\d\d \d[[:space:]]|' | wc -l)
-  [ $bad -eq 0 ]
+  bad=$(echo "$output" | awk '{print $2}'| uniq -d|wc -l)
+  [ $bad -eq 8 ]
 }
 
 it_can_force_colors_on() {
