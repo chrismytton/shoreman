@@ -60,7 +60,7 @@ it_ignores_comments_in_proc_file() {
 
 it_doesnt_intermix_output() {
   output=$(./shoreman.sh 'test/fixtures/fast_procfile'; :)
-  bad=$(echo "$output" | grep -v '^\d\d:\d\d:\d\d \d[[:space:]]|' | wc -l)
+  bad=$(echo "$output" | grep -E -v '^\d\d:\d\d:\d\d \d[[:space:]]|' | wc -l)
   [ $bad -eq 0 ]
 }
 
