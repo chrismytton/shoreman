@@ -9,6 +9,10 @@
 set -eo pipefail
 [[ "$TRACE" ]] && set -x
 
+if [ -z "$PORT" ]; then
+  PORT=3000
+fi
+
 # ## Usage
 
 # Usage message that is displayed when `--help` is given as an argument.
