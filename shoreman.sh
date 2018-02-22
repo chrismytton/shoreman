@@ -23,12 +23,13 @@ usage() {
 # ## Logging
 
 # For logging we want to prefix each entry with the current time, as well
-# as the process name. This takes two arguments, the name of the process
-# with its index, and then reads data from stdin, formats it, and sends it
-# to stdout.
+# as the process name. This takes three arguments, the name of the process,
+# its index and maximum process name length; then reads data from stdin,
+# formats it, and sends it to stdout.
 log() {
   local index="$2"
-  local format="%s %s\t| %s"
+  local field_length=$(("$3" + 1))
+  local format="%s %-${field_length}s| %s"
 
   # We add colors when output is a terminal. `SHOREMAN_COLORS` can override it.
   if [ -t 1 -o "$SHOREMAN_COLORS" == "always" ] \
@@ -36,7 +37,7 @@ log() {
     # Bash colors start from 31 up to 37. We calculate what color the process
     # gets based on its index.
     local color="$((31 + (index % 7)))"
-    format="\033[0;${color}m%s %s\t|\033[0m %s"
+    format="\033[0;${color}m%s %-${field_length}s|\033[0m %s"
   fi
 
   while read -r data
@@ -57,7 +58,7 @@ store_pid() {
 # This starts a command asynchronously and stores its pid in a list for use
 # later on in the script.
 start_command() {
-  bash -c "$1" 2>&1 | log "$2" "$3" &
+  bash -c "$1" 2>&1 | log "$2" "$3" "$4" &
   pid="$(jobs -p %%)"
   store_pid "$pid"
 }
@@ -83,6 +84,13 @@ load_env_file() {
 # The file is given on stdin, see the `<` at the end of this while loop.
 run_procfile() {
   local procfile=${1:-'Procfile'}
+
+  local maxlength=$(while read line || [[ -n "$line" ]]; do
+    if [[ -z "$line" ]] || [[ "$line" == \#* ]]; then continue; fi
+    local name="${line%%:*}"
+    echo "$name"
+  done < "$procfile" | wc -L)
+
   # We give each process an index to track its color. We start with 1,
   # because it corresponds to green which is easier on the eye than red (0).
   local index=1
@@ -90,8 +98,8 @@ run_procfile() {
     if [[ -z "$line" ]] || [[ "$line" == \#* ]]; then continue; fi
     local name="${line%%:*}"
     local command="${line#*:[[:space:]]}"
-    start_command "$command" "${name}" "$index"
-    echo "'${command}' started with pid $pid" | log "${name}" "$index"
+    start_command "$command" "${name}" "$index" "$maxlength"
+    echo "'${command}' started with pid $pid" | log "${name}" "$index" "$maxlength"
     index=$((index + 1))
   done < "$procfile"
 }
