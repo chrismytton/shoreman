@@ -82,28 +82,25 @@ load_env_file() {
 
 # The Procfile needs to be parsed to extract the process names and commands.
 run_procfile() {
-  local procfilename=${1:-'Procfile'}
-
-  local procfile=$(while read line || [[ -n "$line" ]]; do
-    if [[ -z "$line" ]] || [[ "$line" == \#* ]]; then continue; fi
-    echo "$line"
-  done < "$procfilename")
+  local procfile=${1:-'Procfile'}
 
   local maxlength=$(echo "$procfile" | while read line || [[ -n "$line" ]]; do
+    if [[ -z "$line" ]] || [[ "$line" == \#* ]]; then continue; fi
     local name="${line%%:*}"
     echo "$name"
-  done | wc -L)
+  done < "$procfile" | wc -L)
 
   # We give each process an index to track its color. We start with 1,
   # because it corresponds to green which is easier on the eye than red (0).
   local index=1
-  echo "$procfile" | while read line || [[ -n "$line" ]]; do
+  while read line || [[ -n "$line" ]]; do
+    if [[ -z "$line" ]] || [[ "$line" == \#* ]]; then continue; fi
     local name="${line%%:*}"
     local command="${line#*:[[:space:]]}"
     start_command "$command" "${name}" "$index" "$maxlength"
     echo "'${command}' started with pid $pid" | log "${name}" "$index" "$maxlength"
     index=$((index + 1))
-  done
+  done < "$procfile"
 }
 
 # ## Cleanup
