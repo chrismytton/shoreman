@@ -44,6 +44,17 @@ cd shoreman
 make
 ```
 
+## Generate documentation from source code
+
+```
+npm install -g docco
+docco -l linear shoreman.sh
+```
+
+This puts the documentation in a `docs/` directory. You'll then need to manually
+copy the contents of that directory over to the `gh-pages` branch to publish it
+to GitHub Pages.
+
 ## Projects using shoreman
 
 - [dokku-shoreman](https://github.com/statianzo/dokku-shoreman) a plugin
