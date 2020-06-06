@@ -1,9 +1,7 @@
 #!/bin/bash
-
 # [shoreman](https://github.com/chrismytton/shoreman) is an
 # implementation of the **Procfile** format. Inspired by the original
-# [foreman](http://ddollar.github.com/foreman/) tool for ruby, as
-# well as [norman](https://github.com/josh/norman) for node.js.
+# [foreman](http://ddollar.github.com/foreman/) tool for ruby.
 
 # Make sure that any errors cause the script to exit immediately.
 set -eo pipefail
@@ -112,7 +110,7 @@ main() {
   local procfile="$1"
   local env_file="$2"
 
-  # If the --help option is given, show the usage message and exit.
+  # If the `--help` option is given, show the usage message and exit.
   expr -- "$*" : ".*--help" >/dev/null && {
     usage
     exit 0
