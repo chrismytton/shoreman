@@ -44,7 +44,11 @@ cd shoreman
 make
 ```
 
-## Generate documentation from source code
+## Annotated source code
+
+There's a literate-programming-style annotated version of the source code available at https://www.chrismytton.uk/shoreman/.
+
+### Generate documentation from source code
 
 ```
 npm install -g docco
@@ -52,8 +56,8 @@ docco -l linear shoreman.sh
 ```
 
 This puts the documentation in a `docs/` directory. You'll then need to manually
-copy the contents of that directory over to the `gh-pages` branch to publish it
-to GitHub Pages.
+copy the contents of that directory over to the `gh-pages` branch and run
+`mv shoreman.html index.html` in order to publish it to GitHub Pages.
 
 ## Projects using shoreman
 
