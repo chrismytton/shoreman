@@ -1,9 +1,7 @@
-shoreman(1)
+shoreman(1) ![CI](https://github.com/chrismytton/shoreman/workflows/CI/badge.svg?branch=master&event=push)
 ===========
 
 A shell implementation of the Procfile format.
-
-[![Build Status](https://travis-ci.org/chrismytton/shoreman.svg?branch=master)](https://travis-ci.org/chrismytton/shoreman)
 
 ## Install
 
