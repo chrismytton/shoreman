@@ -5,6 +5,10 @@ A shell implementation of [Foreman](https://github.com/ddollar/foreman). Starts 
 
 ## Install
 
+### macOS with Homebrew
+
+    brew install chrismytton/formula/shoreman
+
 ### Standalone
 
 Install as a standalone, change `~/bin/` to any other directory that's
@@ -14,10 +18,6 @@ in your `$PATH` if you wish.
 curl https://github.com/chrismytton/shoreman/raw/master/shoreman.sh -sLo ~/bin/shoreman && \
 chmod 755 ~/bin/shoreman
 ```
-
-### Homebrew
-
-    brew install --HEAD chrismytton/formula/shoreman
 
 ## Usage
 
