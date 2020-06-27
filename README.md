@@ -22,7 +22,7 @@ chmod 755 ~/bin/shoreman
 ## Usage
 
 Head into a project that has a `Procfile` in it, then simply run the
-`shoreman` command, it will read your Procfile, and start up the
+`shoreman` command. It will read your Procfile, and start up the
 processes it finds. If there is a `.env` file in the directory then
 environment variables will be read from it, as with foreman.
 
