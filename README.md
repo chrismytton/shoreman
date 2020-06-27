@@ -15,9 +15,9 @@ curl https://github.com/chrismytton/shoreman/raw/master/shoreman.sh -sLo ~/bin/s
 chmod 755 ~/bin/shoreman
 ```
 
-### Homebrew
+### macOS with Homebrew
 
-    brew install --HEAD chrismytton/formula/shoreman
+    brew install chrismytton/formula/shoreman
 
 ## Usage
 
