@@ -63,10 +63,6 @@ copy the contents of that directory over to the `gh-pages` branch and run
   for [dokku](https://github.com/progrium/dokku) to allow it to run
   multiple process types.
 
-## Todo
-
-* Add concurrency controls for process types.
-
 ## Contributors
 
 * Chris Mytton ([@chrismytton](https://github.com/chrismytton))
