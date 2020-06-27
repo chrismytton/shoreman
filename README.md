@@ -1,7 +1,7 @@
 shoreman(1) ![CI](https://github.com/chrismytton/shoreman/workflows/CI/badge.svg?branch=master&event=push)
 ===========
 
-A shell implementation of the Procfile format.
+A shell implementation of [Foreman](https://github.com/ddollar/foreman). Starts the process formations defined in a `Procfile`.
 
 ## Install
 
@@ -22,7 +22,7 @@ chmod 755 ~/bin/shoreman
 ## Usage
 
 Head into a project that has a `Procfile` in it, then simply run the
-`shoreman` command, it will read your Procfile, and start up the
+`shoreman` command. It will read your Procfile, and start up the
 processes it finds. If there is a `.env` file in the directory then
 environment variables will be read from it, as with foreman.
 
@@ -62,10 +62,6 @@ copy the contents of that directory over to the `gh-pages` branch and run
 - [dokku-shoreman](https://github.com/statianzo/dokku-shoreman) a plugin
   for [dokku](https://github.com/progrium/dokku) to allow it to run
   multiple process types.
-
-## Todo
-
-* Add concurrency controls for process types.
 
 ## Contributors
 
