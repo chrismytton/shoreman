@@ -1,7 +1,7 @@
 shoreman(1) ![CI](https://github.com/chrismytton/shoreman/workflows/CI/badge.svg?branch=master&event=push)
 ===========
 
-A shell implementation of the Procfile format.
+A shell implementation of [Foreman](https://github.com/ddollar/foreman). Starts the process formations defined in a `Procfile`.
 
 ## Install
 
