@@ -37,7 +37,7 @@ log() {
     format="\033[0;${color}m%s %s\t|\033[0m %s"
   fi
 
-  while read -r data
+  while IFS= read -r data
   do
     printf "$format\n" "$(date +"%H:%M:%S")" "$1" "$data"
   done
