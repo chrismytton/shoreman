@@ -68,3 +68,9 @@ it_can_force_colors_on() {
   output=$(SHOREMAN_COLORS=always ./shoreman.sh 'test/fixtures/simple_procfile'; :)
   echo "$output" | grep -q $(printf "\033")
 }
+
+it_preserves_output_whitespace() {
+  output=$(./shoreman.sh 'test/fixtures/whitespace_output_procfile'; :)
+  expected='   output whitespace	is	preserved	'
+  echo "$output" | grep -q -F "| ${expected}"
+}
