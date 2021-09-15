@@ -65,14 +65,7 @@ copy the contents of that directory over to the `gh-pages` branch and run
 
 ## Contributors
 
-* Chris Mytton ([@chrismytton](https://github.com/chrismytton))
-* Mickael Riga ([@mig-hub](https://github.com/mig-hub))
-* Matthew Johnston ([@warmwaffles](https://github.com/warmwaffles))
-* Dmitrij Mjakotnyi ([@kucaahbe](https://github.com/kucaahbe))
-* Stephen Paul Weber ([@singpolyma](https://github.com/singpolyma))
-* ryanrhee ([@ryanrhee](https://github.com/ryanrhee))
-* Lorenzo Giuliani ([@aliem](https://github.com/aliem))
-* KOSEKI Kengo ([@koseki](https://github.com/koseki))
+See the [contributors](https://github.com/chrismytton/shoreman/graphs/contributors) section of GitHub Insights for this repository.
 
 ## Credits
 
