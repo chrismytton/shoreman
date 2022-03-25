@@ -79,3 +79,8 @@ it_preserves_exitstatus() {
   _exitstatus=$(./shoreman.sh 'test/fixtures/exitstatus_procfile' >/dev/null 2>/dev/null || exitstatus=$? ; echo "${exitstatus}")
   [ "${_exitstatus}" -eq 1 ]
 }
+
+it_preserves_mixed_exitstatus() {
+  _exitstatus=$(exitstatus=0 ; ./shoreman.sh 'test/fixtures/mixed_exitstatus_procfile' >/dev/null 2>/dev/null || exitstatus=$?; echo "${exitstatus}")
+  [ "${_exitstatus}" -eq 1 ]
+}
