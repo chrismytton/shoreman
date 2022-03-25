@@ -1,0 +1,3 @@
+failure: false
+# this command needs to be slower that the first one, to attempt to override the previous failure exit status
+success: date

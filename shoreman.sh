@@ -121,8 +121,13 @@ main() {
 
   trap onexit INT TERM
 
-  # Wait for the children to finish executing before exiting.
-  wait $pids
+  exitcode=0
+  for pid in $pids; do
+      # Wait for the children to finish executing before exiting.
+      # If said children exitcode is not successful, collect it.
+      wait "${pid}" || exitcode=$?
+  done
+  exit $exitcode
 }
 
 main "$@"
