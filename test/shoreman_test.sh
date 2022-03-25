@@ -74,3 +74,8 @@ it_preserves_output_whitespace() {
   expected='   output whitespace	is	preserved	'
   echo "$output" | grep -q -F "| ${expected}"
 }
+
+it_preserves_exitstatus() {
+  _exitstatus=$(./shoreman.sh 'test/fixtures/exitstatus_procfile' >/dev/null 2>/dev/null || exitstatus=$? ; echo "${exitstatus}")
+  [ "${_exitstatus}" -eq 1 ]
+}
