@@ -33,7 +33,7 @@ shoreman
 
 ## Running tests
 
-Tests are written using [roundup](http://bmizerany.github.com/roundup/).
+Tests are written using [roundup](https://github.com/bmizerany/roundup).
 
 To run the tests, go to the root of the repository then run `make`.
 
