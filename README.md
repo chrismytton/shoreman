@@ -44,7 +44,7 @@ make
 
 ## Annotated source code
 
-There's a literate-programming-style annotated version of the source code available at https://www.chrismytton.uk/shoreman/.
+There's a literate-programming-style annotated version of the source code available at https://www.chrismytton.com/shoreman/.
 
 ### Generate documentation from source code
 
